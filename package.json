@@ -1,0 +1,30 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "Simple portfolio",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brad Traversy",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.5",
+    "express": "*",
+    "express-handlebars": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "fs": "^0.0.1-security",
+    "json_encode": "^0.1.0",
+    "moment": "*",
+    "morgan": "^1.10.0",
+    "multer": "*",
+    "multiparty": "^4.2.2",
+    "mysql": "*",
+    "pg": "^8.3.2",
+    "url": "^0.11.0",
+    "util": "^0.12.3"
+  }
+}

@@ -1,0 +1,281 @@
+/* Variabels-Start */
+/* Variabels-End */
+/* Mixin-Start */
+/* Mixin-End */
+/*-------------- RESET STYLE ------------------ */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+/*-------------- RESET STYLE ------------------ */
+@font-face {
+  font-family: "vazir";
+  src: url("../font/vazir.eot");
+  /* IE9 Compat Modes */
+  src: url("../font/vazir.ttf") format("truetype"), url("../font/vazir.eot") format("eot"), url("../font/vazir.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+*,
+*:before,
+*:after {
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+html[dir=rtl] .icons {
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  -ms-filter: "FlipH";
+}
+
+body {
+  font-family: "vazir", sans-serif, Arial, Helvetica;
+  background: #fafafa;
+  line-height: 1.6;
+}
+
+::-webkit-input-placeholder {
+  /* WebKit, Blink, Edge */
+  color: #757575;
+  font-size: 0.875rem;
+  font-family: "vazir", sans-serif, Arial, Helvetica;
+  padding: 10px;
+}
+
+:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #757575;
+  font-size: 0.875rem;
+  font-family: "vazir", sans-serif, Arial, Helvetica;
+}
+
+::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #757575;
+  font-size: 0.875rem;
+  padding: 10px;
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #757575;
+  font-size: 0.875rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.material-tooltip {
+  text-align: center;
+  font-family: "iranyekanwebregular", sans-serif, Arial, Helvetica;
+  font-size: small;
+  color: #fff;
+  background-color: #263238;
+}
+
+#toast-container {
+  bottom: auto !important;
+  top: 20%;
+}
+
+div.toast {
+  font-family: "vazir", sans-serif, Arial, Helvetica;
+  color: #fff;
+  border-radius: 100px !important;
+  font-size: 15px;
+  justify-content: center;
+}
+
+.info-toast {
+  background-color: #17a2b8;
+}
+
+.success-toast {
+  background-color: #28a745;
+}
+
+.error-toast {
+  background-color: #dc3545;
+}
+
+.warning-toast {
+  background-color: orangered;
+}
+
+#plotId {
+  font-family: "vazir", sans-serif, Arial, Helvetica;
+}
+
+p::selection {
+  background-color: #E8EAF6;
+}
+
+.modal.bottom-sheet {
+  bottom: 45% !important;
+  margin: auto;
+  width: 40%;
+  max-height: 50%;
+  border-radius: 10px;
+}
+
+.fa-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+}
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+main {
+  width: 80%;
+  float: left;
+}
+
+.send_product_frm {
+  padding: 24px;
+  max-width: 75%;
+  margin: auto;
+}
+
+.send_product_frm input {
+  border-radius: 40px;
+}
+
+.send_product_frm label {
+  padding: 0 12px;
+}
+
+.add_spec_fieldset fieldset button {
+  position: absolute;
+  left: -80px;
+  top: 0;
+}
+
+.add_document_fieldset fieldset button {
+  position: absolute;
+  left: -80px;
+  top: 0;
+}
+
+.add_image_fieldset fieldset button {
+  position: absolute;
+  left: -80px;
+  top: 0;
+}
+
+#send_product_frm_submit {
+  border-radius: 40px;
+}
+
+.addImage input {
+  direction: ltr;
+}
+
+/*----------------------------Media Queries----------------------------*/
+@media screen and (max-width: 1200px) {
+  main {
+    width: 100%;
+  }
+}
+
+/*# sourceMappingURL=main.css.map */
