@@ -8,8 +8,8 @@ let multiparty = require('multiparty');
 let fs = require('fs');
 let json_encode = require('json_encode');
 let path = require('path');
-let url = require('url');
 const util = require('util');
+
 
 
 
@@ -23,8 +23,28 @@ const client = new Client({
 client.connect();
 
 
+router.post('/add',function (req, res, next) {
 
-router.post('/add', function (req, res, next) {
+    // var errors = validationResult(req);
+    // if ( ! errors.isEmpty()){
+    //     let errs = errors.errors;
+    //     errs.forEach(function (error) {
+    //         console.log('err: ' + util.inspect(error.msg));
+    //     });
+    // }
+
+    // req.checkBody('partnumber', 'partnumber22 is required').notEmpty();
+    // req.checkBody('description', 'desc22 is required').notEmpty();
+    // let errors = req.validationErrors();
+    // console.log('errors: ' + util.inspect(errors));
+    // if(! errors.isEmpty()){
+    //     let errs = errors.errors;
+    //     errs.forEach(function (error) {
+    //         console.log('err: ' + util.inspect(error.msg));
+    //     });
+    //    res.render('dashboard/dashboard', {validation_errors: errs});
+    // }else {
+    // }
 
     let form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
@@ -32,11 +52,11 @@ router.post('/add', function (req, res, next) {
         let description = fields.description;
         let detaileddescription = fields.detaileddescription;
 
-        if (partnumber !== '' || description !== '') {
-            res.send('Fill the filelds.');
-            return;
-        }
 
+        // if (partnumber[0] === '' || description[0] === '') {
+        //     res.send('Fill the filelds.');
+        //     return;
+        // }
         // Images
         let imgArray = files.part_image;
         let imageNames = [];
@@ -88,8 +108,10 @@ router.post('/add', function (req, res, next) {
                 documentsArray.push( doc_types[k] + ":" + json_encode(tempArray));
             }
         }
-        console.log(util.inspect( documentsArray, {depth: null}));
-        let docs_json = '"Documents":' + json_encode(documentsArray);
+        let documentsArrayJson = json_encode(documentsArray).replace(/\[/g, "").replace(/\]/g, "");
+        let docs_json = '"Documents":{' + documentsArrayJson + '}';
+        docs_json = docs_json.replace(/\\/g, "");
+
 
 
         // Attributes
@@ -101,9 +123,8 @@ router.post('/add', function (req, res, next) {
                 attr_names[i] + ':' + attr_values[i]
             );
         }
-        let attr_json = '"Attributes":{' + json_encode(array);
-        console.log('attrjson: ' + util.inspect(attr_json));
-
+        let attr_json = '"Attributes":{' + json_encode(array) + '}';
+        attr_json = attr_json.replace(/\[/g, "").replace(/\]/g, "");
 
 
         const dkj_json = image_json + ','  + docs_json + ',' + attr_json;
@@ -112,15 +133,19 @@ router.post('/add', function (req, res, next) {
             text: 'insert into xproduct_202008041139(partnumber, description, detaileddescription,sij,dkj) VALUES($1,$2,$3,$4,$5)',
             values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json],
         };
-        client.query(query, (err, res) => {
+        client.query(query, (err, response) => {
             if (err) {
-                console.log(err.stack)
+                console.log(err.stack);
+                req.session.sessionFlash = {type: 'danger', message: 'خطا در افزودن محصول!'};
+                res.redirect('/dashboard');
             } else {
-                console.log(res.rows[0])
+                console.log(response.rows[0]);
+                req.session.sessionFlash = {type: 'success', message: 'محصول اضافه شد.'};
+                res.redirect('/dashboard');
             }
         });
-
     });
+
 
 
 
@@ -145,4 +170,5 @@ router.post('/add', function (req, res, next) {
         return ext[ext.length - 1];
     }
 });
+
 module.exports = router;
