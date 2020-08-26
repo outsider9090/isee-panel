@@ -13,14 +13,6 @@
                                 </div>
                             <% } %>
 
-                            <% if (typeof validation_errors !== 'undefined' && validation_errors.length > 0){ %>
-                                <ul class="errors">
-                                    <% validation_errors.forEach(function (error) { %>
-                                        <li><%= error.msg  %></li>
-                                    <% }) %>
-                                </ul>
-                            <% } %>
-
                             <form action="/products/add" method="post" class="send_product_frm" novalidate enctype="multipart/form-data">
                                 <fieldset class="mb-5">
                                     <h5 class="text-center">ارسال محصول جدید</h5>
@@ -28,28 +20,29 @@
                                 <div class="form-row">
                                     <div class="col-12 mb-4 required">
                                         <label for="partnumber">شماره قطعه</label>
-                                        <input type="text" class="form-control" id="partnumber" name="partnumber" required>
-                                        <div class="invalid-feedback">
-                                            <span>لطفا نام خود را وارد کنید</span>
-                                        </div>
+                                        <input type="text" class="form-control" id="partnumber" name="partnumber">
+                                        <% if (validation_errors.length != 0 && validation_errors.partnumber != null){ %>
+                                            <div class="error-feedback">
+                                                <span><%= validation_errors.partnumber %></span>
+                                            </div>
+                                        <% } %>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-12 mb-4 required">
                                         <label for="description">توضیحات قطعه</label>
-                                        <input type="text" class="form-control" id="description" name="description" required>
-                                        <div class="invalid-feedback">
-                                            <span>لطفا نام خود را وارد کنید</span>
-                                        </div>
+                                        <input type="text" class="form-control" id="description" name="description">
+                                        <% if (validation_errors.length != 0 && validation_errors.description != null){ %>
+                                            <div class="error-feedback">
+                                                <span><%= validation_errors.description %></span>
+                                            </div>
+                                        <% } %>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-12 mb-4">
                                         <label for="detaileddescription">توصیف همراه با جزئیات</label>
                                         <input type="text" class="form-control" id="detaileddescription" name="detaileddescription">
-                                        <div class="invalid-feedback">
-                                            <span>لطفا نام خود را وارد کنید</span>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="add_image_fieldset" style="position: relative;">
@@ -65,6 +58,11 @@
                                             <label for="file">تصویر</label>
                                             <input type="file" class="form-control images" id="Image" name="part_image" accept="image/*">
                                         </div>
+                                        <% if (validation_errors.length != 0 && validation_errors.part_image != null){ %>
+                                            <div class="error-feedback">
+                                                <span><%= validation_errors.part_image %></span>
+                                            </div>
+                                        <% } %>
                                     </div>
                                 </div>
                                 <div class="add_document_fieldset" style="position: relative;">
@@ -88,6 +86,11 @@
                                             <label for="Doc_url">فایل سند </label>
                                             <input type="file" class="form-control" id="Doc_url" name="docUrl" required accept="application/pdf">
                                         </div>
+                                        <% if (validation_errors.length != 0 && validation_errors.docUrl != null){ %>
+                                            <div class="error-feedback">
+                                                <span><%= validation_errors.docUrl %></span>
+                                            </div>
+                                        <% } %>
                                     </div>
                                 </div>
                                 <div class="add_spec_fieldset" style="position: relative;">

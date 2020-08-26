@@ -5,7 +5,7 @@ let router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('dashboard/dashboard', {title: 'Add Product'});
+    res.render('dashboard/dashboard', {title: 'Add Product' , validation_errors: ''});
 });
 
 

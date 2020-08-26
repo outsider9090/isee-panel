@@ -2,12 +2,11 @@ let express = require('express');
 let path = require('path');
 let bodyParser = require('body-parser');
 let session = require('express-session');
-let multer = require('multer');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let flash = require('express-flash');
 //let expressValidator = require('express-validator');
-let { check, validationResult } = require('express-validator');
+//let { check, validationResult } = require('express-validator');
 
 
 // Route Files
@@ -33,10 +32,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-//////////////////
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
-/////////////////
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 
 // Handle Sessions
 app.use(session({
@@ -46,39 +44,10 @@ app.use(session({
 }));
 
 
-// Validator
-// app.use(expressValidator({
-// 	errorFormatter: function(param, msg, value) {
-// 		var namespace = param.split('.')
-// 			, root    = namespace.shift()
-// 			, formParam = root;
-//
-// 		while(namespace.length) {
-// 			formParam += '[' + namespace.shift() + ']';
-// 		}
-// 		return {
-// 			param : formParam,
-// 			msg   : msg,
-// 			value : value
-// 		};
-// 	}
-// }));
-
-
 // Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
 // Connect Flash
 app.use(flash());
-
-
-// let sessionStore = new session.MemoryStore;
-// // app.use(session({
-// // 	cookie: { maxAge: 60000 },
-// // 	store: sessionStore,
-// // 	saveUninitialized: true,
-// // 	resave: 'true',
-// // 	secret: 'secret'
-// // }));
 
 
 // Custom flash middleware -- from Ethan Brown's book, 'Web Development with Node & Express'
@@ -88,8 +57,6 @@ app.use(function(req, res, next){
 	delete req.session.sessionFlash;
 	next();
 });
-
-
 
 
 app.use('/', indexRouter);
@@ -112,7 +79,6 @@ app.use('/products', productsdRouter);
 //     res.status(err.status || 500);
 //     res.render('error');
 // });
-
 
 
 

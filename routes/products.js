@@ -9,8 +9,8 @@ let fs = require('fs');
 let json_encode = require('json_encode');
 let path = require('path');
 const util = require('util');
-
-
+let validator = require("validator");
+let url = require("url");
 
 
 const client = new Client({
@@ -23,28 +23,11 @@ const client = new Client({
 client.connect();
 
 
-router.post('/add',function (req, res, next) {
+router.get('/add',function () {
+    res.render('dashboard/dashboard', {validation_errors: ''});
+});
 
-    // var errors = validationResult(req);
-    // if ( ! errors.isEmpty()){
-    //     let errs = errors.errors;
-    //     errs.forEach(function (error) {
-    //         console.log('err: ' + util.inspect(error.msg));
-    //     });
-    // }
-
-    // req.checkBody('partnumber', 'partnumber22 is required').notEmpty();
-    // req.checkBody('description', 'desc22 is required').notEmpty();
-    // let errors = req.validationErrors();
-    // console.log('errors: ' + util.inspect(errors));
-    // if(! errors.isEmpty()){
-    //     let errs = errors.errors;
-    //     errs.forEach(function (error) {
-    //         console.log('err: ' + util.inspect(error.msg));
-    //     });
-    //    res.render('dashboard/dashboard', {validation_errors: errs});
-    // }else {
-    // }
+router.post('/add',function (req, res) {
 
     let form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
@@ -53,13 +36,25 @@ router.post('/add',function (req, res, next) {
         let detaileddescription = fields.detaileddescription;
 
 
-        // if (partnumber[0] === '' || description[0] === '') {
-        //     res.send('Fill the filelds.');
-        //     return;
-        // }
+        const errors = new Object();
+        if (validator.equals(partnumber[0],''))
+        {
+            errors.partnumber = 'لطفا شماره قطعه را وارد کنید!';
+        }
+        if(validator.equals(description[0],'')){
+            errors.description = 'لطفا توضیحات قطعه را وارد کنید!';
+        }
+
+
+        if (errors.isEmpty){
+            res.render('dashboard/dashboard', {validation_errors: errors});
+            return;
+        }
+
         // Images
         let imgArray = files.part_image;
         let imageNames = [];
+        let image_json = '';
         for (let j = 0; j < imgArray.length; j++) {
             let uploadImageOk = 1;
             let newPath = './public/uploads/images/';
@@ -68,17 +63,19 @@ router.post('/add',function (req, res, next) {
             if (fileType !== "jpg" && fileType !== "jpeg" && fileType !== "png" ){
                 uploadImageOk = 0;
             }
-            if (uploadImageOk === 0){
-                res.send('Sorry, your images was not uploaded.');
-            } else {
+            if (uploadImageOk !== 0){
                 let hostname = req.headers.host;
                 newPath+= singleImg.originalFilename;
                 readAndWriteImage(singleImg, newPath);
                 imageNames.push('http://' + hostname + '/uploads/images/' + imgArray[j].originalFilename);
             }
         }
-        // var pathname = url.parse(req.url).pathname; // pathname = '/MyApp'
-        let image_json = '"Image":' + json_encode(imageNames) ;
+        if (imageNames.length !== 0){
+            image_json = '"Image":' + json_encode(imageNames) ;
+        } else {
+            image_json = '' ;
+            errors.part_image = 'حداقل یک تصویر انتخاب کنید!';
+        }
 
 
         // Documents
@@ -86,6 +83,7 @@ router.post('/add',function (req, res, next) {
         let doc_names = fields.docName;
         let filesArray = files.docUrl;
         let documentsArray = [];
+        let docs_json = '';
         for (let k = 0; k < filesArray.length; k++) {
             let uploadFileOk = 1;
             let tempArray = [];
@@ -96,9 +94,7 @@ router.post('/add',function (req, res, next) {
             if (fileType !== 'pdf' && fileType !== 'html' && fileType !== 'htm' ){
                 uploadFileOk = 0;
             }
-            if (uploadFileOk === 0){
-                res.send('Sorry, your files was not uploaded.');
-            } else {
+            if (uploadFileOk !== 0){
                 newPath+= singleFile.originalFilename;
                 readAndWriteFile(singleFile, newPath);
                 tempArray.push({
@@ -108,44 +104,65 @@ router.post('/add',function (req, res, next) {
                 documentsArray.push( doc_types[k] + ":" + json_encode(tempArray));
             }
         }
-        let documentsArrayJson = json_encode(documentsArray).replace(/\[/g, "").replace(/\]/g, "");
-        let docs_json = '"Documents":{' + documentsArrayJson + '}';
-        docs_json = docs_json.replace(/\\/g, "");
+        if (documentsArray.length !== 0){
+            let documentsArrayJson = json_encode(documentsArray).replace(/\[/g, "").replace(/\]/g, "");
+            docs_json = '"Documents":{' + documentsArrayJson + '}';
+            docs_json = docs_json.replace(/\\/g, "");
+        } else {
+            docs_json = '';
+            errors.docUrl = 'لطفا فایل سند را انتخاب کنید!';
+        }
 
 
 
         // Attributes
         let attr_names = fields.attribNames;
         let attr_values = fields.attribValues;
-        let array = [];
+        let attr_array = [];
+        let attr_json = '';
+        let counter = 0;
         for (let i = 0; i < attr_names.length; i++) {
-            array.push(
-                attr_names[i] + ':' + attr_values[i]
-            );
+            if (attr_names[i] === ''){counter++;}
+            attr_array.push(attr_names[i] + ':' + attr_values[i]);
         }
-        let attr_json = '"Attributes":{' + json_encode(array) + '}';
-        attr_json = attr_json.replace(/\[/g, "").replace(/\]/g, "");
+        if (counter === 0){
+            attr_json = '"Attributes":{' + json_encode(attr_array) + '}';
+            attr_json = attr_json.replace(/\[/g, "").replace(/\]/g, "");
+        }else {
+            attr_json = '';
+        }
 
 
-        const dkj_json = image_json + ','  + docs_json + ',' + attr_json;
-        const sij_json = image_json + ','  + docs_json;
-        const query = {
-            text: 'insert into xproduct_202008041139(partnumber, description, detaileddescription,sij,dkj) VALUES($1,$2,$3,$4,$5)',
-            values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json],
-        };
-        client.query(query, (err, response) => {
-            if (err) {
-                console.log(err.stack);
-                req.session.sessionFlash = {type: 'danger', message: 'خطا در افزودن محصول!'};
-                res.redirect('/dashboard');
-            } else {
-                console.log(response.rows[0]);
-                req.session.sessionFlash = {type: 'success', message: 'محصول اضافه شد.'};
-                res.redirect('/dashboard');
-            }
-        });
+
+
+        if (image_json === '' && docs_json === '' && attr_json === ''){
+            req.session.sessionFlash = {type: 'danger', message: 'خطا در افزودن محصول!'};
+            res.render('dashboard/dashboard', {validation_errors: errors});
+           // res.redirect('/dashboard');
+        } else {
+            const dkj_json = image_json + ','  + docs_json + ',' + attr_json;
+            const sij_json = image_json + ','  + docs_json;
+            const query = {
+                text: 'insert into xproduct_202008041139(partnumber, description, detaileddescription,sij,dkj) VALUES($1,$2,$3,$4,$5)',
+                values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json],
+            };
+            client.query(query, (err, response) => {
+                if (err) {
+                    //console.log(err.stack);
+                    req.session.sessionFlash = {type: 'danger', message: 'خطا در افزودن محصول!'};
+                    res.redirect('/dashboard');
+                    //return;
+                } else {
+                    console.log(response.rows[0]);
+                    req.session.sessionFlash = {type: 'success', message: 'محصول اضافه شد.'};
+                    res.redirect('/dashboard');
+                    //return;
+                }
+            });
+
+        }
+
     });
-
 
 
 
