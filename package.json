@@ -9,6 +9,7 @@
   "author": "Brad Traversy",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "*",
     "connect-flash": "*",
     "cookie-parser": "^1.4.5",
@@ -26,7 +27,7 @@
     "multer": "*",
     "multiparty": "^4.2.2",
     "node-input-validator": "^4.2.1",
-    "pg": "^8.3.2",
+    "pg": "^8.3.3",
     "url": "^0.11.0",
     "util": "^0.12.3",
     "validator": "^13.1.1"

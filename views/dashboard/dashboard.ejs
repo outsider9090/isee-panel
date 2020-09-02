@@ -1,5 +1,6 @@
 <%- include ("../layouts/dashboard/header") %>
 
+
 <main class="pt-5">
     <div class="container w-100">
         <div class="row my-5">
@@ -7,20 +8,161 @@
                 <div class="send_product_form_container">
                     <div class="card">
                         <div class="card-body">
-                            <% if ( sessionFlash && sessionFlash.message) { %>
-                                <div class="alert alert-<%= sessionFlash.type %>">
-                                    <%= sessionFlash.message %>
-                                </div>
+
+                            <% if ( sessionFlash && sessionFlash.type == 'addSuccessMsg') { %>
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function () {
+                                        toastr.options = {
+                                            "closeButton": false,
+                                            "debug": false,
+                                            "newestOnTop": false,
+                                            "progressBar": true,
+                                            "positionClass": "md-toast-bottom-left",
+                                            "preventDuplicates": false,
+                                            "onclick": null,
+                                            "showDuration": 300,
+                                            "hideDuration": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000,
+                                            "showEasing": "swing",
+                                            "hideEasing": "linear",
+                                            "showMethod": "fadeIn",
+                                            "hideMethod": "fadeOut"
+                                        };
+                                        toastr.success(addSuccessMsg);
+                                    });
+                                </script>
+                            <% } %>
+                            <% if ( sessionFlash && sessionFlash.type == 'addErrorMsg') { %>
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function () {
+                                        toastr.options = {
+                                            "closeButton": false,
+                                            "debug": false,
+                                            "newestOnTop": false,
+                                            "progressBar": true,
+                                            "positionClass": "md-toast-bottom-left",
+                                            "preventDuplicates": false,
+                                            "onclick": null,
+                                            "showDuration": 300,
+                                            "hideDuration": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000,
+                                            "showEasing": "swing",
+                                            "hideEasing": "linear",
+                                            "showMethod": "fadeIn",
+                                            "hideMethod": "fadeOut"
+                                        };
+                                        toastr.error(addErrorMsg);
+                                    });
+                                </script>
+                            <% } %>
+                            <% if ( sessionFlash && sessionFlash.type == 'loginSuccess') { %>
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function () {
+                                        toastr.options = {
+                                            "closeButton": false,
+                                            "debug": false,
+                                            "newestOnTop": false,
+                                            "progressBar": true,
+                                            "positionClass": "md-toast-bottom-left",
+                                            "preventDuplicates": false,
+                                            "onclick": null,
+                                            "showDuration": 300,
+                                            "hideDuration": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000,
+                                            "showEasing": "swing",
+                                            "hideEasing": "linear",
+                                            "showMethod": "fadeIn",
+                                            "hideMethod": "fadeOut"
+                                        };
+                                        toastr.success(loginSuccess);
+                                    });
+                                </script>
+                            <% } %>
+                            <% if ( sessionFlash && sessionFlash.type == 'loginError') { %>
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function () {
+                                        toastr.options = {
+                                            "closeButton": false,
+                                            "debug": false,
+                                            "newestOnTop": false,
+                                            "progressBar": true,
+                                            "positionClass": "md-toast-bottom-left",
+                                            "preventDuplicates": false,
+                                            "onclick": null,
+                                            "showDuration": 300,
+                                            "hideDuration": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000,
+                                            "showEasing": "swing",
+                                            "hideEasing": "linear",
+                                            "showMethod": "fadeIn",
+                                            "hideMethod": "fadeOut"
+                                        };
+                                        toastr.error(loginError);
+                                    });
+                                </script>
+                            <% } %>
+                            <% if ( sessionFlash && sessionFlash.type == 'signupError') { %>
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function () {
+                                        toastr.options = {
+                                            "closeButton": false,
+                                            "debug": false,
+                                            "newestOnTop": false,
+                                            "progressBar": true,
+                                            "positionClass": "md-toast-bottom-left",
+                                            "preventDuplicates": false,
+                                            "onclick": null,
+                                            "showDuration": 300,
+                                            "hideDuration": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000,
+                                            "showEasing": "swing",
+                                            "hideEasing": "linear",
+                                            "showMethod": "fadeIn",
+                                            "hideMethod": "fadeOut"
+                                        };
+                                        toastr.error(signupError);
+                                    });
+                                </script>
+                            <% } %>
+                            <% if ( sessionFlash && sessionFlash.type == 'SignupSuccess') { %>
+                                <script type="text/javascript">
+                                    jQuery(document).ready(function () {
+                                        toastr.options = {
+                                            "closeButton": false,
+                                            "debug": false,
+                                            "newestOnTop": false,
+                                            "progressBar": true,
+                                            "positionClass": "md-toast-bottom-left",
+                                            "preventDuplicates": false,
+                                            "onclick": null,
+                                            "showDuration": 300,
+                                            "hideDuration": 1000,
+                                            "timeOut": 5000,
+                                            "extendedTimeOut": 1000,
+                                            "showEasing": "swing",
+                                            "hideEasing": "linear",
+                                            "showMethod": "fadeIn",
+                                            "hideMethod": "fadeOut"
+                                        };
+                                        toastr.success(SignupSuccess);
+                                    });
+                                </script>
                             <% } %>
 
-                            <form action="/products/add" method="post" class="send_product_frm" novalidate enctype="multipart/form-data">
+                            <form action="/products/add" method="post" class="md-form send_product_frm"
+                                  novalidate enctype="multipart/form-data">
                                 <fieldset class="mb-5">
-                                    <h5 class="text-center">ارسال محصول جدید</h5>
+                                    <h5 class="form_title text-center">ارسال محصول جدید</h5>
                                 </fieldset>
                                 <div class="form-row">
                                     <div class="col-12 mb-4 required">
                                         <label for="partnumber">شماره قطعه</label>
-                                        <input type="text" class="form-control" id="partnumber" name="partnumber">
+                                        <input type="text" class="form-control" id="partnumber" name="partnumber" required>
                                         <% if (validation_errors.length != 0 && validation_errors.partnumber != null){ %>
                                             <div class="error-feedback">
                                                 <span><%= validation_errors.partnumber %></span>
@@ -31,7 +173,7 @@
                                 <div class="form-row">
                                     <div class="col-12 mb-4 required">
                                         <label for="description">توضیحات قطعه</label>
-                                        <input type="text" class="form-control" id="description" name="description">
+                                        <input type="text" class="form-control" id="description" name="description" required>
                                         <% if (validation_errors.length != 0 && validation_errors.description != null){ %>
                                             <div class="error-feedback">
                                                 <span><%= validation_errors.description %></span>
@@ -45,76 +187,96 @@
                                         <input type="text" class="form-control" id="detaileddescription" name="detaileddescription">
                                     </div>
                                 </div>
-                                <div class="add_image_fieldset" style="position: relative;">
-                                    <fieldset class="mb-2">
-                                        <h6 class="text-right font-weight-bold">تصویر قطعه</h6>
-                                        <button type="button" class="btn btn-info rounded-circle" data-toggle="tooltip" data-placement="bottom" title="افزودن تصویر"
-                                                id="add_image_input" style="width:50px ;height: 50px;">
-                                            <i class="material-icons align-middle">add</i>
-                                        </button>
-                                    </fieldset>
-                                    <div class="form-row addImage">
-                                        <div class="col-12 mb-4">
-                                            <label for="file">تصویر</label>
-                                            <input type="file" class="form-control images" id="Image" name="part_image" accept="image/*">
-                                        </div>
-                                        <% if (validation_errors.length != 0 && validation_errors.part_image != null){ %>
-                                            <div class="error-feedback">
-                                                <span><%= validation_errors.part_image %></span>
+
+                                <div class="add_image_fieldset">
+                                    <a class="btn-floating btn-sm deep-purple" id="add_image_input" data-toggle="tooltip"
+                                       title="افزودن تصویر">
+                                        <i class="material-icons align-middle">add</i>
+                                    </a>
+                                    <h6 class="text-right font-weight-bold">تصویر قطعه</h6>
+                                </div>
+                                <div class="addImage">
+                                    <div class="col-12 my-2">
+                                        <div class="form-row file-field ">
+                                            <div class="file-path-wrapper">
+                                                <input class="file-path validate" type="text" placeholder="آپلود تصویر">
                                             </div>
-                                        <% } %>
+                                            <a class="btn-floating btn-md purple-gradient mt-0 float-left">
+                                                <i class="material-icons">cloud_upload</i>
+                                                <input type="file" id="Image" name="part_image" accept="image/*">
+                                            </a>
+                                        </div>
                                     </div>
+                                    <% if (validation_errors.length != 0 && validation_errors.part_image != null){ %>
+                                        <div class="error-feedback">
+                                            <span><%= validation_errors.part_image %></span>
+                                        </div>
+                                    <% } %>
                                 </div>
-                                <div class="add_document_fieldset" style="position: relative;">
-                                    <fieldset class="mb-2">
-                                        <h6 class="text-right font-weight-bold">اسناد</h6>
-                                        <button type="button" class="btn btn-info rounded-circle" data-toggle="tooltip" data-placement="bottom" title="افزودن سند"
-                                                id="add_doc_input" style="width:50px ;height: 50px;">
-                                            <i class="material-icons align-middle">add</i>
-                                        </button>
-                                    </fieldset>
-                                    <div class="form-row addDocument">
-                                        <div class="col-md-4 col-sm-12 mb-4">
-                                            <label for="Doc_type">نوع سند </label>
-                                            <input type="text" class="form-control docType" id="Doc_type" name="docType" required>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12 mb-4">
-                                            <label for="Doc_name">نام سند </label>
-                                            <input type="text" class="form-control" id="Doc_name" name="docName" required>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12 mb-4">
-                                            <label for="Doc_url">فایل سند </label>
-                                            <input type="file" class="form-control" id="Doc_url" name="docUrl" required accept="application/pdf">
-                                        </div>
-                                        <% if (validation_errors.length != 0 && validation_errors.docUrl != null){ %>
-                                            <div class="error-feedback">
-                                                <span><%= validation_errors.docUrl %></span>
+
+
+                                <div class="add_document_fieldset">
+                                    <a class="btn-floating btn-sm deep-purple" id="add_doc_input" data-toggle="tooltip"
+                                       title="افزودن سند">
+                                        <i class="material-icons align-middle">add</i>
+                                    </a>
+                                    <h6 class="text-right font-weight-bold">اسناد</h6>
+                                </div>
+                                <div class="addDocument">
+                                    <div class="col-12 my-2">
+                                        <div class="form-row">
+                                            <div class="col-md-6 col-sm-12 mb-4">
+                                                <label for="Doc_type">نوع سند </label>
+                                                <input type="text" class="form-control docType" id="Doc_type" name="docType" required>
                                             </div>
-                                        <% } %>
+                                            <div class="col-md-6 col-sm-12 mb-4">
+                                                <label for="Doc_name">نام سند </label>
+                                                <input type="text" class="form-control" id="Doc_name" name="docName" required>
+                                            </div>
+                                            <div class="form-row file-field col-12">
+                                                <div class="file-path-wrapper">
+                                                    <input class="file-path validate" type="text" placeholder="آپلود فایل">
+                                                </div>
+                                                <a class="btn-floating btn-md purple-gradient mt-0 float-left">
+                                                    <i class="material-icons">cloud_upload</i>
+                                                    <input type="file" id="Doc_url" name="docUrl" accept="application/pdf">
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <% if (validation_errors.length != 0 && validation_errors.docUrl != null){ %>
+                                        <div class="error-feedback">
+                                            <span><%= validation_errors.docUrl %></span>
+                                        </div>
+                                    <% } %>
                                 </div>
-                                <div class="add_spec_fieldset" style="position: relative;">
-                                    <fieldset class="mb-2">
-                                        <h6 class="text-right font-weight-bold">ویژگی های قطعه</h6>
-                                        <button type="button" class="btn btn-info rounded-circle" data-toggle="tooltip" data-placement="bottom" title="افزودن ویژگی"
-                                                id="add_spec_input" style="width:50px ;height: 50px;">
-                                            <i class="material-icons align-middle">add</i>
-                                        </button>
-                                    </fieldset>
+
+                                <div class="add_spec_fieldset">
+                                    <a class="btn-floating btn-sm deep-purple" id="add_spec_input" data-toggle="tooltip"
+                                       title="افزودن ویژگی">
+                                        <i class="material-icons align-middle">add</i>
+                                    </a>
+                                    <h6 class="text-right font-weight-bold">ویژگی های قطعه</h6>
                                 </div>
-                                <div class="form-row addAttrib">
-                                    <div class="col-md-6 col-sm-12 mb-4">
-                                        <label for="Attribute_name">عنوان ویژگی</label>
-                                        <input type="text" class="form-control" id="Attribute_name" name="attribNames" required>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12 mb-4">
-                                        <label for="Attribute_value">مقدار ویژگی</label>
-                                        <input type="text" class="form-control" id="Attribute_value" name="attribValues" required>
+                                <div class="addAttrib">
+                                    <div class="col-12 my-2">
+                                        <div class="form-row">
+                                            <div class="col-md-6 col-sm-12 mb-4">
+                                                <label for="Attribute_name">عنوان ویژگی</label>
+                                                <input type="text" class="form-control" id="Attribute_name" name="attribNames" required>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12 mb-4">
+                                                <label for="Attribute_value">مقدار ویژگی</label>
+                                                <input type="text" class="form-control" id="Attribute_value" name="attribValues" required>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="row my-4">
-                                    <button class="btn btn-info btn-block btn-lg" type="submit" name="btn_send_product" id="send_product_frm_submit">ثبت</button>
+                                    <button type="submit" class="btn btn-outline-default btn-block waves-effect" name="btn_send_product" id="send_product_frm_submit">
+                                        ثبت <i class="material-icons align-middle">refresh</i>
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -123,6 +285,126 @@
             </div>
         </div>
     </div>
+
+    <!-- Auth Modal -->
+    <div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog cascading-modal" role="document">
+            <!--Content-->
+            <div class="modal-content">
+                <!--Modal cascading tabs-->
+                <div class="modal-c-tabs">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fas fa-user mr-1"></i>
+                                Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fas fa-user-plus mr-1"></i>
+                                Register</a>
+                        </li>
+                    </ul>
+                    <!-- Tab panels -->
+                    <div class="tab-content">
+                        <!--Panel 7-->
+                        <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+                            <!--Body-->
+                            <div class="modal-body mb-1">
+                                <form action="/users/signin" method="post" class="md-form" novalidate>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required">
+                                            <label for="email" data-error="wrong" data-success="right">ایمیل</label>
+                                            <input type="email" class="form-control validate" id="email" name="email" required>
+                                            <div class="error-feedback">
+                                                <span>لطفا یک ایمیل معتبر وارد کنید</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required">
+                                            <label for="your_password">رمز عبور</label>
+                                            <input type="password" class="form-control" id="your_password" name="password" required>
+                                            <div class="error-feedback">
+                                                <span>لطفا کلمه عبور را وارد کنید</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row my-4">
+                                        <button type="submit" class="btn btn-success btn-block waves-effect z-depth-1a" name="btn_signin">
+                                            ورود
+                                            <i class="material-icons align-middle">refresh</i>
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <!--Footer-->
+                            <div class="modal-footer">
+                                <div class="options text-center text-md-right mt-1">
+                                    <p>Not a member? <a href="#" class="blue-text">Sign Up</a></p>
+                                    <p>Forgot <a href="#" class="blue-text">Password?</a></p>
+                                </div>
+                                <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        <!--/.Panel 7-->
+
+                        <!--Panel 8-->
+                        <div class="tab-pane fade" id="panel8" role="tabpanel">
+                            <!--Body-->
+                            <div class="modal-body">
+                                <form action="/users/signup" method="post" class="md-form" novalidate>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required">
+                                            <label for="your_email" data-error="wrong" data-success="right">ایمیل</label>
+                                            <input type="email" class="form-control validate" id="your_email" name="email" required>
+                                            <div class="error-feedback">
+                                                <span>لطفا یک ایمیل معتبر وارد کنید</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required">
+                                            <label for="your_password">رمز عبور</label>
+                                            <input type="password" class="form-control" id="your_password" name="password" required>
+                                            <div class="error-feedback">
+                                                <span>لطفا کلمه عبور را وارد کنید</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required">
+                                            <label for="your_password_repeat">تکرار رمز عبور</label>
+                                            <input type="password" class="form-control" id="your_password_repeat" name="password_repeat" required>
+                                            <div class="error-feedback">
+                                                <span>کلمه عبور با تکرار آن مطابقت ندارد</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row my-4">
+                                        <button type="submit" class="btn blue-gradient btn-block waves-effect z-depth-1a" name="btn_signup" id="">
+                                            ثبت نام <i class="material-icons align-middle">refresh</i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!--Footer-->
+                            <div class="modal-footer">
+                                <div class="options text-right">
+                                    <p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p>
+                                </div>
+                                <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        <!--/.Panel 8-->
+                    </div>
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    <!-- Auth Modal -->
+
 </main>
 
 <%- include ("../layouts/dashboard/footer") %>

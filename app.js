@@ -5,8 +5,8 @@ let session = require('express-session');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let flash = require('express-flash');
-//let expressValidator = require('express-validator');
-//let { check, validationResult } = require('express-validator');
+
+
 
 
 // Route Files
@@ -36,27 +36,36 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-// Handle Sessions
+//Handle Sessions
 app.use(session({
 	secret:'secret',
 	saveUninitialized: true,
 	resave: true
 }));
-
-
-// Static Folder
-app.use(express.static(path.join(__dirname, 'public')));
-// Connect Flash
+//Connect Flash
 app.use(flash());
-
-
 // Custom flash middleware -- from Ethan Brown's book, 'Web Development with Node & Express'
 app.use(function(req, res, next){
-	// if there's a flash message in the session request, make it available in the response, then delete it
 	res.locals.sessionFlash = req.session.sessionFlash;
 	delete req.session.sessionFlash;
 	next();
 });
+
+
+app.all('/dotest', function(req, res){
+	req.flash('test', 'it worked');
+	res.redirect('/test')
+});
+
+app.all('/test', function(req, res){
+	res.send(JSON.stringify(req.flash('test')));
+});
+
+
+
+// Static Folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 app.use('/', indexRouter);
