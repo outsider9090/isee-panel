@@ -1,0 +1,240 @@
+<%- include ("../layouts/site/header") %>
+
+<main class="pt-5" id="site_main">
+
+    <% if ( sessionFlash && sessionFlash.type == 'logoutSuccess') { %>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "md-toast-bottom-left",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": 300,
+                    "hideDuration": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000,
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+                toastr.info(logoutSuccess);
+            });
+        </script>
+    <% } %>
+    <% if ( sessionFlash && sessionFlash.type == 'loginError') { %>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "md-toast-bottom-left",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": 300,
+                    "hideDuration": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000,
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+                toastr.error(loginError);
+            });
+        </script>
+    <% } %>
+    <% if ( sessionFlash && sessionFlash.type == 'signupError') { %>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "md-toast-bottom-left",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": 300,
+                    "hideDuration": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000,
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+                toastr.error(signupError);
+            });
+        </script>
+    <% } %>
+    <% if ( sessionFlash && sessionFlash.type == 'SignupSuccess') { %>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": true,
+                    "positionClass": "md-toast-bottom-left",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": 300,
+                    "hideDuration": 1000,
+                    "timeOut": 5000,
+                    "extendedTimeOut": 1000,
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+                toastr.success(SignupSuccess);
+            });
+        </script>
+    <% } %>
+
+    <div class="container w-100">
+        <div class="row my-5">
+            <div class="jumbotron">
+                <h2 class="display-4">Hello, world!</h2>
+                <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                <hr class="my-4">
+                <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+                <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog cascading-modal" role="document">
+            <div class="modal-content">
+                <!--Modal cascading tabs-->
+                <div class="modal-c-tabs">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs md-tabs tabs-2" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab" id="loginTab"><i class="fas fa-user mr-1"></i>
+                                ورود به سایت</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#panel8" role="tab" id="registerTab"><i class="fas fa-user-plus mr-1"></i>
+                                ثبت نام در سایت</a>
+                        </li>
+                    </ul>
+                    <!-- Tab panels -->
+                    <div class="tab-content">
+                        <!--Panel 7-->
+                        <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+                            <!--Body-->
+                            <div class="modal-body mb-1">
+                                <form action="/users/signin" method="post" class="md-form" id="signin_form" novalidate>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required">
+                                            <label for="email">ایمیل</label>
+                                            <input type="email" class="form-control" id="email" name="email" required>
+                                            <div class="error-feedback">
+                                                <span>لطفا یک ایمیل معتبر وارد کنید</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required">
+                                            <label for="password">رمز عبور</label>
+                                            <input type="password" class="form-control" id="password" name="password" required>
+                                            <div class="error-feedback">
+                                                <span>کلمه عبور را وارد کنید</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <button type="submit" class="btn aqua-gradient btn-block waves-effect z-depth-1a">ورود</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!--Footer-->
+                            <div class="modal-footer">
+                                <div class="options text-center text-md-right mt-1">
+                                    <p>هنوز عضو نشده اید؟ <a href="#" id="registerTabClick">ثبت نام</a></p>
+                                    <p><a href="#">رمزتان را فراموش کرده اید</a></p>
+                                </div>
+                                <a class="mr-auto text-dark" data-dismiss="modal">
+                                    <i class="material-icons align-middle">close</i>
+                                </a>
+                            </div>
+                        </div>
+                        <!--/.Panel 7-->
+
+                        <!--Panel 8-->
+                        <div class="tab-pane fade" id="panel8" role="tabpanel">
+                            <!--Body-->
+                            <div class="modal-body">
+                                <form action="/users/signup" method="post" class="md-form" id="signup_form" novalidate>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required">
+                                            <label for="your_email" data-error="wrong" data-success="right">ایمیل</label>
+                                            <input type="email" class="form-control" id="your_email" name="email" required>
+                                            <div class="error-feedback">
+                                                <span>لطفا یک ایمیل معتبر وارد کنید</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required" style="position: relative;">
+                                            <label for="your_password">رمز عبور</label>
+                                            <input type="password" class="form-control" id="your_password" name="password" required>
+                                            <div class="error-feedback">
+                                                <span>ساختار کلمه عبور رعایت نشده است!</span>
+                                            </div>
+                                            <i class="material-icons align-middle password_reveal" id="pass_reveal" style="cursor: pointer;">visibility_off</i>
+                                            <small class="form-text text-muted">کلمه عبور باید حداقل 6 حرف داشته باشد.</small>
+                                            <!--<div id="password-strength-status" class=""></div>-->
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 mb-4 required" style="position: relative;">
+                                            <label for="your_password_repeat">تکرار رمز عبور</label>
+                                            <input type="password" class="form-control" id="your_password_repeat" name="password_repeat" required>
+                                            <i class="material-icons align-middle password_reveal" id="pass_repeat_reveal" style="cursor: pointer;">visibility_off</i>
+                                            <div class="error-feedback">
+                                                <span>کلمه عبور با تکرار آن مطابقت ندارد</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <button type="submit" class="btn aqua-gradient btn-block waves-effect z-depth-1a" id="btn_signup" disabled>
+                                            ثبت نام
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!--Footer-->
+                            <div class="modal-footer">
+                                <div class="options text-right">
+                                    <p class="pt-1">قبلا عضو شده اید؟<a href="#" id="loginTabClick">ورود به سایت</a></p>
+                                </div>
+                                <a class="mr-auto text-dark" data-dismiss="modal">
+                                    <i class="material-icons align-middle">close</i>
+                                </a>
+                            </div>
+                        </div>
+                        <!--/.Panel 8-->
+                    </div>
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    <!-- Auth Modal -->
+
+</main>
+
+<%- include ("../layouts/site/footer") %>
+
+

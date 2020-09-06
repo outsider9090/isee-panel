@@ -1,0 +1,63 @@
+<%- include ("../layouts/dashboard/header") %>
+
+
+<main class="pt-5">
+    <div class="container w-100">
+        <div class="row my-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="products_list_table">
+                            <div class="title">
+                                <h5>جدول لیست محصولات</h5>
+                            </div>
+                            <div class="table_container">
+                                <table class="table table-responsive">
+                                    <!--<caption>List of users</caption>-->
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">شماره قطعه</th>
+                                        <th scope="col">توضیحات قطعه</th>
+                                        <th scope="col">توصیف همراه با جزئیات</th>
+                                        <th scope="col">تصویر قطعه</th>
+                                        <th scope="col">اسناد</th>
+                                        <th scope="col">ویژگی های قطعه</th>
+                                        <th scope="col">عملیات</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% let counter=0 %>
+                                        <% products.forEach( product => { %>
+                                            <% counter++ %>
+                                            <tr>
+                                                <th scope="row"><%= counter %></th>
+                                                <td><%= product.partnumber %></td>
+                                                <td><%= product.description %></td>
+                                                <td><%= product.detaileddescription %></td>
+                                                <td><i class="material-icons align-middle text-success">check</i></td>
+                                                <td><i class="material-icons align-middle text-warning">do_not_disturb</i></td>
+                                                <td><i class="material-icons align-middle text-success">check</i></td>
+                                                <td class="tbl_ops">
+                                                    <a href="/products/edit/<%= product.id %>"><i class="material-icons align-middle mx-1 text-info">edit</i></a>
+                                                    <a href="/products/delete/<%= product.id %>"><i class="material-icons align-middle mx-1 text-danger">delete_forever</i></a>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</main>
+
+<%- include ("../layouts/dashboard/footer") %>
+
+

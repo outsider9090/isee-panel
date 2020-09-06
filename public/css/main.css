@@ -248,6 +248,10 @@ main {
   float: left;
 }
 
+main#site_main {
+  width: 100%;
+}
+
 .md-form label {
   right: 0 !important;
   left: unset !important;
@@ -263,16 +267,40 @@ main {
 }
 
 .modal {
-  width: 80%;
+  width: 100%;
 }
 
-.fixed-top {
+form input {
+  border-radius: 40px;
+  text-indent: 24px;
+}
+form label {
+  padding: 0 12px;
+  text-indent: 15px;
+}
+form button[type=submit] {
+  font-family: "Yekan", sans-serif, Arial, Helvetica;
+  font-size: 1.25rem;
+  padding: 5px;
+  border-radius: 0;
+}
+form .form-text {
+  text-align: right;
+}
+form button:disabled {
+  cursor: not-allowed;
+}
+
+nav {
   right: 20% !important;
 }
-
 nav .nav-link {
   color: #424242 !important;
   font-size: 14px !important;
+}
+
+nav#site_navbar {
+  right: 0 !important;
 }
 
 .sidebar-fixed {
@@ -328,13 +356,6 @@ nav .nav-link {
   font-family: "Yekan", sans-serif, Arial, Helvetica;
   font-size: 1.5rem;
 }
-.send_product_frm input {
-  border-radius: 40px;
-  text-indent: 24px;
-}
-.send_product_frm label {
-  padding: 0 12px;
-}
 .send_product_frm .add_image_fieldset, .send_product_frm .add_document_fieldset, .send_product_frm .add_spec_fieldset {
   display: flex;
   position: relative;
@@ -343,12 +364,6 @@ nav .nav-link {
   align-items: center;
   align-content: center;
   margin: 30px auto;
-}
-.send_product_frm .error-feedback {
-  text-align: right;
-  padding: 4px 8px;
-  font-size: 13px;
-  color: red;
 }
 .send_product_frm .file-field {
   display: flex;
@@ -375,6 +390,43 @@ nav .nav-link {
   color: red;
   vertical-align: sub;
   padding: 5px;
+}
+
+.error-feedback {
+  text-align: right;
+  padding: 4px 8px;
+  font-size: 13px;
+  color: red;
+  display: none;
+}
+
+#authModal ul.nav {
+  margin: 0;
+  border-radius: 0;
+  background-color: #673AB7;
+}
+#authModal .modal-footer {
+  padding: 10px 20px;
+}
+#authModal .modal-footer .options p {
+  font-size: 13px;
+}
+#authModal .modal-footer .options a {
+  color: #673AB7;
+}
+#authModal .modal-footer a[data-dismiss=modal]:hover {
+  transition: 0.4s ease !important;
+  -webkit-transition: 0.4s ease !important;
+  -moz-transition: 0.4s ease !important;
+  -o-transition: 0.4s ease !important;
+  -ms-transition: 0.4s ease !important;
+  transform: rotateZ(90deg);
+}
+#authModal #signup_form .password_reveal {
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  font-size: 20px;
 }
 
 /*----------------------------Media Queries----------------------------*/

@@ -5,13 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>title</title>
+    <title><%= title %></title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/mdb.min.css" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
-
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
 </head>
 
@@ -43,11 +41,17 @@
                 </ul>
                 <!-- Left -->
                 <ul class="navbar-nav nav-flex-icons">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link border border-light rounded waves-effect"
-                           target="_blank" data-toggle="modal" data-target="#modalLRForm">
-                            ورود به حساب کاربری<i class="material-icons mr-2 align-middle">person_pin</i>
+                    <li class="nav-item avatar dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <img src="/assets/images/User-Avatar.png" class="rounded-circle z-depth-0"
+                                 alt="avatar image">
                         </a>
+                        <div class="dropdown-menu dropdown-menu-lg-left dropdown-secondary"
+                             aria-labelledby="navbarDropdownMenuLink-55">
+                            <span class="dropdown-item">سلام کاربر جدید</span>
+                            <a class="dropdown-item" href="/users/logout">خروج</a>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -61,11 +65,14 @@
             <img src="/assets/images/logo.png" class="img-fluid" alt="">
         </a>
         <div class="list-group list-group-flush">
-            <a href="#" class="list-group-item active waves-effect">
-                <i class="fas fa-chart-pie mr-3"></i>پیشخوان
+            <a href="/dashboard" class="list-group-item active waves-effect">
+                پیشخوان
             </a>
-            <a href="#" class="list-group-item list-group-item-action waves-effect">
-                <i class="fas fa-user mr-3"></i>ارسال محصول
+            <a href="/dashboard/add_product" class="list-group-item list-group-item-action waves-effect">
+                ارسال محصول
+            </a>
+            <a href="/dashboard/products" class="list-group-item list-group-item-action waves-effect">
+                لیست محصولات
             </a>
         </div>
     </div>
@@ -77,6 +84,7 @@
     <input type="hidden" id="login_error" value="نام کاربری یا کلمه عبور اشتباه است!">
     <input type="hidden" id="register_error" value="مشکل در ثبت نام!">
     <input type="hidden" id="register_success" value="ثبت نام با موفقیت انجام شد.">
+    <input type="hidden" id="logout_success" value="از سایت خارج شدید.">
 </header>
 <!--Main Navigation-->
 

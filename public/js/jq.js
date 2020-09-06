@@ -4,16 +4,19 @@ const loginSuccess = document.getElementById("login_success").value;
 const loginError = document.getElementById("login_error").value;
 const signupError = document.getElementById("register_error").value;
 const SignupSuccess = document.getElementById("register_success").value;
+const logoutSuccess = document.getElementById("logout_success").value;
 
 
 jQuery(document).ready(function ($) {
-    // initials //
-    $('[data-toggle="tooltip"]').tooltip();
-    // initials //
 
-    $('#partnumber').on('input',function () {
+    // initials
+    $('[data-toggle="tooltip"]').tooltip();
+    // initials
+
+
+    $('#send_product_form').find('#partnumber').on('input',function () {
         var input_txt = $(this).val();
-        if (input_txt == ''){
+        if (input_txt === ''){
             $(this).addClass('is-invalid');
             $(this).removeClass('is-valid');
             $(this).siblings('.error-feedback').css('display', 'block');
@@ -23,9 +26,9 @@ jQuery(document).ready(function ($) {
             $(this).siblings('.error-feedback').css('display', 'none');
         }
     });
-    $('#description').on('input',function () {
+    $('#send_product_form').find('#description').on('input',function () {
         var input_txt = $(this).val();
-        if (input_txt == ''){
+        if (input_txt === ''){
             $(this).addClass('is-invalid');
             $(this).removeClass('is-valid');
             $(this).siblings('.error-feedback').css('display', 'block');
@@ -35,6 +38,94 @@ jQuery(document).ready(function ($) {
             $(this).siblings('.error-feedback').css('display', 'none');
         }
     });
+    $('#signup_form').find('#your_email').on('input',function () {
+        let input_txt = $(this).val();
+        let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        let is_email_valid = emailReg.test( input_txt );
+        if (! is_email_valid || input_txt === ''){
+            $(this).addClass('is-invalid');
+            $(this).removeClass('is-valid');
+            $(this).siblings('.error-feedback').css('display', 'block');
+        }else {
+            $(this).addClass('is-valid');
+            $(this).removeClass('is-invalid');
+            $(this).siblings('.error-feedback').css('display', 'none');
+        }
+    });
+    $('#signup_form').find('#your_password').on('input',function () {
+        let input_txt = $(this).val();
+        if (input_txt === '' || input_txt.length < 6){
+            $(this).addClass('is-invalid');
+            $(this).removeClass('is-valid');
+            $(this).siblings('.error-feedback').css('display', 'block');
+        }else {
+            $(this).addClass('is-valid');
+            $(this).removeClass('is-invalid');
+            $(this).siblings('.error-feedback').css('display', 'none');
+        }
+
+        // let number = /([0-9])/;
+        // let alphabets = /([a-zA-Z])/;
+        // let special_characters = /([~,!,@,#,$,%,^,&,*,-,_,+,=,?,>,<])/;
+        // const pass_str_div = $('#signup_form').find('#password-strength-status');
+        // if($(this).val().length<6) {
+        //     pass_str_div.removeClass();
+        //     pass_str_div.addClass('weak-password');
+        //     pass_str_div.html("کلمه عبور ضعیف. (حداقل باید 6 کاراکتر باشد)");
+        // } else {
+        //     if($(this).val().match(number) && $(this).val().match(alphabets) && $(this).val().match(special_characters)) {
+        //         pass_str_div.removeClass();
+        //         pass_str_div.addClass('strong-password');
+        //         pass_str_div.html("کلمه عبور قوی");
+        //     } else {
+        //         pass_str_div.removeClass();
+        //         pass_str_div.addClass('medium-password');
+        //         pass_str_div.html("Medium (should include alphabets, numbers and special characters.)");
+        //         pass_str_div.html("کلمه عبور متوسط. (باید شامل حروف، اعداد و کاراکترهای ویژه باشد)");
+        //     }
+        // }
+
+    });
+    $('#signup_form').find('#your_password_repeat').on('input',function () {
+        let pass_repeat = $(this).val();
+        let pass = $('#your_password').val();
+        if ( pass_repeat !== pass ){
+            $(this).addClass('is-invalid');
+            $(this).removeClass('is-valid');
+            $(this).siblings('.error-feedback').css('display', 'block');
+        }else {
+            $(this).addClass('is-valid');
+            $(this).removeClass('is-invalid');
+            $(this).siblings('.error-feedback').css('display', 'none');
+        }
+    });
+    $('#signin_form').find('#email').on('input',function () {
+        let input_txt = $(this).val();
+        let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        let is_email_valid = emailReg.test( input_txt );
+        if (! is_email_valid || input_txt === ''){
+            $(this).addClass('is-invalid');
+            $(this).removeClass('is-valid');
+            $(this).siblings('.error-feedback').css('display', 'block');
+        }else {
+            $(this).addClass('is-valid');
+            $(this).removeClass('is-invalid');
+            $(this).siblings('.error-feedback').css('display', 'none');
+        }
+    });
+    $('#signin_form').find('#password').on('input',function () {
+        let input_txt = $(this).val();
+        if (input_txt === ''){
+            $(this).addClass('is-invalid');
+            $(this).removeClass('is-valid');
+            $(this).siblings('.error-feedback').css('display', 'block');
+        }else {
+            $(this).addClass('is-valid');
+            $(this).removeClass('is-invalid');
+            $(this).siblings('.error-feedback').css('display', 'none');
+        }
+    });
+
 
 
     $('#add_spec_input').click(function (e) {
@@ -55,7 +146,36 @@ jQuery(document).ready(function ($) {
 
     $('button[type=submit]').click(function () {
         $(this).find('i').addClass('spin').css('display', 'inline-block');
-    })
+    });
+
+    $('#loginTabClick').on('click' , function (e) {
+        e.preventDefault();
+        $('#loginTab').click();
+    });
+    $('#registerTabClick').on('click' , function (e) {
+        e.preventDefault();
+        $('#registerTab').click();
+    });
+
+    $('#pass_reveal').on('click' , function () {
+        let status = $(this).html();
+        if (status === 'visibility_off') {
+            $('#signup_form').find('#your_password').attr('type', 'text');
+            $(this).html('visibility');
+        }else {
+            $('#signup_form').find('#your_password').attr('type', 'password');
+            $(this).html('visibility_off');
+        }
+    });
+    $('#pass_repeat_reveal').on('click' , function () {
+        let status = $(this).html();
+        if (status === 'visibility_off') {
+            $('#signup_form').find('#your_password_repeat').attr('type', 'text');
+            $(this).html('visibility');
+        }else {
+            $('#signup_form').find('#your_password_repeat').attr('type', 'password');
+            $(this).html('visibility_off');
+        }
+    });
+
 });
-
-

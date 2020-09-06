@@ -5,6 +5,8 @@ let session = require('express-session');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let flash = require('express-flash');
+let passport = require('passport');
+const { requiresLogin } = require('./config/middlewares/auth');
 
 
 
@@ -42,6 +44,9 @@ app.use(session({
 	saveUninitialized: true,
 	resave: true
 }));
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
 //Connect Flash
 app.use(flash());
 // Custom flash middleware -- from Ethan Brown's book, 'Web Development with Node & Express'
@@ -52,17 +57,6 @@ app.use(function(req, res, next){
 });
 
 
-app.all('/dotest', function(req, res){
-	req.flash('test', 'it worked');
-	res.redirect('/test')
-});
-
-app.all('/test', function(req, res){
-	res.send(JSON.stringify(req.flash('test')));
-});
-
-
-
 // Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -70,7 +64,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/dashboard', dashboardRouter);
+app.use('/dashboard' , requiresLogin , dashboardRouter);
 app.use('/products', productsdRouter);
 
 

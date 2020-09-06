@@ -1,27 +1,19 @@
 let express = require('express');
 let router = express.Router();
-const { Client } = require('pg');
 let multiparty = require('multiparty');
 let fs = require('fs');
 let json_encode = require('json_encode');
 let path = require('path');
 let validator = require("validator");
 let util = require("util");
+let client = require('../config/db/db');
 
-
-const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'postgres',
-    password: '172839',
-    port: 5432
-});
-client.connect();
 
 
 router.get('/add',function () {
-    res.render('dashboard/dashboard', {validation_errors: '' });
+    res.render('dashboard/add_product', {validation_errors: '' });
 });
+
 
 router.post('/add',function (req, res) {
     let form = new multiparty.Form();
@@ -29,6 +21,9 @@ router.post('/add',function (req, res) {
         let partnumber = fields.partnumber;
         let description = fields.description;
         let detaileddescription = fields.detaileddescription;
+        const oldValues = new Object();
+        oldValues.partnumber = partnumber;
+        oldValues.description = description;
 
         const errors = new Object();
         if (validator.equals(partnumber[0],''))
@@ -38,8 +33,6 @@ router.post('/add',function (req, res) {
         if(validator.equals(description[0],'')){
             errors.description = 'لطفا توضیحات قطعه را وارد کنید!';
         }
-
-
 
         // Images
         let imgArray = files.part_image;
@@ -55,10 +48,10 @@ router.post('/add',function (req, res) {
             }
             if (uploadImageOk !== 0){
                 let hostname = req.headers.host;
-                newPath+= singleImg.originalFilename;
-                //singleImg.originalFilename = 'dsadadad' + singleImg.originalFilename;
+                let timeNow = Date.now();
+                newPath+=  timeNow + '-' + singleImg.originalFilename;
                 readAndWriteImage(singleImg, newPath);
-                imageNames.push('http://' + hostname + '/uploads/images/' + imgArray[j].originalFilename);
+                imageNames.push('http://' + hostname + '/uploads/images/' + timeNow + '-' + imgArray[j].originalFilename);
             }
         }
         if (imageNames.length !== 0){
@@ -75,7 +68,6 @@ router.post('/add',function (req, res) {
         let filesArray = files.docUrl;
         let documentsArray = {};
         let docs_json = '';
-        let tempArray = [];
         for (let k = 0; k < filesArray.length; k++) {
             let uploadFileOk = 1;
             let hostname = req.headers.host;
@@ -86,20 +78,25 @@ router.post('/add',function (req, res) {
                 uploadFileOk = 0;
             }
             if (uploadFileOk !== 0){
-                newPath+= singleFile.originalFilename;
+                let timeNow = Date.now();
+                newPath+= timeNow + '-' + singleFile.originalFilename;
                 readAndWriteFile(singleFile, newPath);
-                tempArray.push({
-                    "Name:"  : doc_names[k],
-                    "Url:"  : 'http://' + hostname + '/uploads/documents/' + filesArray[k].originalFilename
-                });
-                documentsArray[doc_types[k]] = tempArray;
+                documentsArray[doc_types[k]]=[{
+                    'Name':doc_names[k],
+                    'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
+                }];
             }
         }
-        if (tempArray.length !== 0){
+
+        console.log(util.inspect('len: ' + objectSize(documentsArray)));
+
+        if (objectSize(documentsArray) !== 0){
+            console.log('11111');
             let documentsArrayJson = json_encode(documentsArray).replace(/\[/g, "").replace(/\]/g, "");
             docs_json = '"Documents":' + documentsArrayJson;
             docs_json = docs_json.replace(/\\/g, "");
         } else {
+            console.log('2222');
             docs_json = '';
             errors.docUrl = 'لطفا فایل سند را انتخاب کنید!';
         }
@@ -126,47 +123,51 @@ router.post('/add',function (req, res) {
         if (! isEmpty(errors)){
             //req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
             //res.redirect('/dashboard');
-            res.render('dashboard/dashboard', {validation_errors: errors});
+            res.render('dashboard/add_product', {
+                title: 'افزودن محصول',
+                validation_errors: errors,
+                old_values: oldValues
+            });
         }else {
             if (image_json === '' && docs_json === '' && attr_json === ''){
                 req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
-                res.render('dashboard/dashboard', {validation_errors: errors});
+                res.render('dashboard/add_product', {title: 'افزودن محصول',validation_errors: errors});
             } else {
-                const dkj_json = image_json + ','  + docs_json + ',' + attr_json;
-                const sij_json = image_json + ','  + docs_json;
+                const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
+                const sij_json = '{' + image_json + ','  + docs_json + '}';
                 const query = {
-                    text: 'insert into xproduct_202008041139(partnumber, description, detaileddescription,sij,dkj) VALUES($1,$2,$3,$4,$5)',
-                    values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json],
+                    text: 'insert into xproducts(partnumber, description, detaileddescription,sij,dkj,user_id) VALUES($1,$2,$3,$4,$5,$6)',
+                    values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,req.user.id],
                 };
                 client.query(query, (err, response) => {
                     if (err) {
                         //console.log(err.stack);
                         req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
-                        res.redirect('/dashboard');
+                        res.redirect('/dashboard/add_product');
                     } else {
                         //console.log(response.rows[0]);
                         req.session.sessionFlash = {type: 'addSuccessMsg', message: 'محصول اضافه شد.'};
-                        res.redirect('/dashboard');
+                        res.redirect('/dashboard/add_product');
                     }
                 });
             }
         }
-
-
-
     });
 
 
 
 
+    function objectSize(obj) {
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+    }
     function readAndWriteImage(singleImg, newPath) {
         fs.readFile(singleImg.path , function(err,data) {
-            // var timeInMss = Date.now();
-            // var new_data = timeInMss + '-' + singleImg.originalFilename;
-            // console.log('data: ' + data);
             fs.writeFile(newPath,data, function(err) {
                 if (err) console.log('ERRRRRR!! :'+err);
-                console.log('Fitxer: '+singleImg.originalFilename +' - '+ newPath);
             })
         })
     }
@@ -174,7 +175,6 @@ router.post('/add',function (req, res) {
         fs.readFile(singleFile.path , function(err,data) {
             fs.writeFile(newPath,data, function(err) {
                 if (err) console.log('ERRRRRR!! :'+err);
-                console.log('Fitxer: '+singleFile.originalFilename +' - '+ newPath);
             })
         })
     }
@@ -189,6 +189,51 @@ router.post('/add',function (req, res) {
         }
         return true;
     }
+});
+
+router.get('/edit/:product_id' , function (req,res) {
+    const query = {
+        text: 'SELECT * FROM xproducts WHERE id=$1',
+        values: [req.params.product_id],
+    };
+    client.query(query, (err, response) => {
+        if (err) {
+            console.log(err.stack);
+            //req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
+            res.redirect('/dashboard');
+        } else {
+            //req.session.sessionFlash = {type: 'addSuccessMsg', message: 'محصول اضافه شد.'};
+            json_str = json_encode(response.rows[0].dkj);
+            json_parse = JSON.parse(response.rows[0].dkj);
+            console.log(util.inspect('json: ' + typeof json_str));
+            console.log(util.inspect('image: ' +  json_str.Image));
+            console.log(util.inspect('image:3 ' +  json_str[0]['Image']));
+            console.log(util.inspect('image2: ' +  response.rows[0].dkj));
+            console.log(util.inspect('image4: ' +  json_parse['Image']));
+            res.render('dashboard/edit_product' , {
+                title: 'ویرایش محصول',
+                validation_errors : '',
+                product : response.rows[0]
+            });
+        }
+    });
+});
+
+router.get('/delete/:product_id' , function (req,res) {
+    const query = {
+        text: 'DELETE FROM xproducts WHERE id=$1',
+        values: [req.params.product_id],
+    };
+    client.query(query, (err, response) => {
+        if (err) {
+            console.log(err.stack);
+            //req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
+            res.redirect('/dashboard');
+        } else {
+            //req.session.sessionFlash = {type: 'addSuccessMsg', message: 'محصول اضافه شد.'};
+            res.redirect('/dashboard/products');
+        }
+    });
 });
 
 module.exports = router;
