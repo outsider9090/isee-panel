@@ -1,5 +1,7 @@
 const addSuccessMsg = document.getElementById("add_success_msg").value;
 const addErrorMsg = document.getElementById("add_error_msg").value;
+const editErrorMsg = document.getElementById("edit_error_msg").value;
+const editSuccessMsg = document.getElementById("edit_success_msg").value;
 const loginSuccess = document.getElementById("login_success").value;
 const loginError = document.getElementById("login_error").value;
 const signupError = document.getElementById("register_error").value;
@@ -177,5 +179,87 @@ jQuery(document).ready(function ($) {
             $(this).html('visibility_off');
         }
     });
+
+
+    $('.del_modal_trigger').click(function () {
+        let imageSrc = $(this).data('src');
+        let new_href = '/image/remove/' + imageSrc;
+        $('#del_modal_submit_btn').attr('href' , new_href);
+    });
+
+
+    $('.delete_product').click(function (e) {
+        e.preventDefault();
+        let product_id = $(this).data('id');
+
+        if (confirm('از حذف این محصول اطمینان دارید؟')){
+            $.ajax({
+                url: '/delete_product',
+                type: 'POST',
+                data: { 'product_id':product_id },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data['msg'] === 1){
+                        //alert('deleted');
+                        window.location.reload();
+                    } else {
+                        alert(data['msg']);
+                    }
+                }, error:function (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+    });
+
+    $('.removeImage').click(function () {
+        let thisElement = $(this);
+        if (confirm('از حذف این آیتم اطمینان دارید؟')){
+            let img_src = $(this).data('src');
+            let res = img_src.split("/");
+            alert(img_src);
+            $.ajax({
+                url: '/remove_image',
+                type: 'POST',
+                data: { 'img_name':res[5] },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data['msg'] === 1){
+                        //alert('deleted');
+                        thisElement.parent().remove();
+                    } else {
+                        alert(data['msg']);
+                    }
+                }, error:function (err) {
+                    console.log(err);
+                }
+            });
+        }
+    });
+    $('.removeDoc').click(function () {
+        let thisElement = $(this);
+        if (confirm('از حذف این آیتم اطمینان دارید؟')){
+            let doc_src = $(this).data('src');
+            let res = doc_src.split("/");
+            $.ajax({
+                url: '/remove_document',
+                type: 'POST',
+                data: { 'doc_name':res[5] },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data['msg'] === 1){
+                        //alert('deleted');
+                        thisElement.parent().remove();
+                    } else {
+                        alert(data['msg']);
+                    }
+                }, error:function (err) {
+                    console.log(err);
+                }
+            });
+        }
+    });
+
 
 });

@@ -66,12 +66,7 @@
                                     <div class="col-12 mb-4 required">
                                         <label for="partnumber">شماره قطعه</label>
                                         <input type="text" class="form-control" id="partnumber" name="partnumber" required
-                                        value="<%= product.partnumber %>">
-                                        <% if (validation_errors.length != 0 && validation_errors.partnumber != null){ %>
-                                            <div class="error-feedback" style="display: block;">
-                                                <span><%= validation_errors.partnumber %></span>
-                                            </div>
-                                        <% } %>
+                                               value="<%= product.partnumber %>">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -79,11 +74,6 @@
                                         <label for="description">توضیحات قطعه</label>
                                         <input type="text" class="form-control" id="description" name="description" required
                                                value="<%= product.description %>">
-                                        <% if (validation_errors.length != 0 && validation_errors.description != null){ %>
-                                            <div class="error-feedback" style="display: block;">
-                                                <span><%= validation_errors.description %></span>
-                                            </div>
-                                        <% } %>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -92,24 +82,6 @@
                                         <input type="text" class="form-control" id="detaileddescription" name="detaileddescription" value="<%= product.detaileddescription %>">
                                     </div>
                                 </div>
-
-                                <div class="table_container">
-                                    <table class="table table-responsive">
-                                        <caption>List of images</caption>
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">نام عکس</th>
-                                            <th scope="col">عملیات</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <% let counter=0 %>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
 
                                 <div class="add_image_fieldset">
                                     <a class="btn-floating btn-sm deep-purple" id="add_image_input" data-toggle="tooltip"
@@ -120,23 +92,24 @@
                                 </div>
                                 <div class="addImage">
                                     <div class="col-12 my-2">
-                                        <div class="form-row file-field ">
-                                            <div class="file-path-wrapper">
-                                                <input class="file-path validate" type="text" placeholder="آپلود تصویر">
+                                        <% images.forEach( image => { %>
+                                            <div class="form-row file-field ">
+                                                <div class="file-path-wrapper">
+                                                    <input class="file-path validate" type="text" name="old_part_image"
+                                                           placeholder="آپلود تصویر" value="<%= image %>">
+                                                </div>
+                                                <a class="btn-floating btn-md purple-gradient mt-0 float-left">
+                                                    <i class="material-icons">cloud_upload</i>
+                                                    <input type="file" id="Image" accept="image/*">
+                                                </a>
+                                                <a class="btn-floating btn-sm deep-orange removeImage"
+                                                   data-src="<%= image %>">
+                                                    <i class="material-icons align-middle">remove</i>
+                                                </a>
                                             </div>
-                                            <a class="btn-floating btn-md purple-gradient mt-0 float-left">
-                                                <i class="material-icons">cloud_upload</i>
-                                                <input type="file" id="Image" name="part_image" accept="image/*">
-                                            </a>
-                                        </div>
+                                        <% }) %>
                                     </div>
-                                    <% if (validation_errors.length != 0 && validation_errors.part_image != null){ %>
-                                        <div class="error-feedback" style="display: block;">
-                                            <span><%= validation_errors.part_image %></span>
-                                        </div>
-                                    <% } %>
                                 </div>
-
 
                                 <div class="add_document_fieldset">
                                     <a class="btn-floating btn-sm deep-purple" id="add_doc_input" data-toggle="tooltip"
@@ -147,31 +120,32 @@
                                 </div>
                                 <div class="addDocument">
                                     <div class="col-12 my-2">
-                                        <div class="form-row">
-                                            <div class="col-md-6 col-sm-12 mb-4">
-                                                <label for="Doc_type">نوع سند </label>
-                                                <input type="text" class="form-control docType" id="Doc_type" name="docType" required>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12 mb-4">
-                                                <label for="Doc_name">نام سند </label>
-                                                <input type="text" class="form-control" id="Doc_name" name="docName" required>
-                                            </div>
-                                            <div class="form-row file-field col-12">
-                                                <div class="file-path-wrapper">
-                                                    <input class="file-path validate" type="text" placeholder="آپلود فایل">
+                                        <% docs.forEach( doc => { %>
+                                            <div class="form-row">
+                                                <div class="col-md-6 col-sm-12 mb-4">
+                                                    <label for="Doc_type">نوع سند</label>
+                                                    <input type="text" class="form-control docType" id="Doc_type" name="oldDocType" required value="<%= doc[0] %>" >
                                                 </div>
-                                                <a class="btn-floating btn-md purple-gradient mt-0 float-left">
-                                                    <i class="material-icons">cloud_upload</i>
-                                                    <input type="file" id="Doc_url" name="docUrl" accept="application/pdf">
+                                                <div class="col-md-6 col-sm-12 mb-4">
+                                                    <label for="Doc_name">نام سند </label>
+                                                    <input type="text" class="form-control" id="Doc_name" name="oldDocName" required value="<%= doc[1]['Name'] %>" >
+                                                </div>
+                                                <div class="form-row file-field col-12">
+                                                    <div class="file-path-wrapper">
+                                                        <input class="file-path validate" type="text" placeholder="آپلود فایل" value="<%= doc[1]['Url'] %>" name="oldDocUrl">
+                                                    </div>
+                                                    <a class="btn-floating btn-md purple-gradient mt-0 float-left">
+                                                        <i class="material-icons">cloud_upload</i>
+                                                        <input type="file" id="Doc_url" accept="application/pdf">
+                                                    </a>
+                                                </div>
+                                                <a class="btn-floating btn-sm deep-orange removeDoc"
+                                                   data-src="<%= doc[1]['Url'] %>">
+                                                    <i class="material-icons align-middle">remove</i>
                                                 </a>
                                             </div>
-                                        </div>
+                                        <% }) %>
                                     </div>
-                                    <% if (validation_errors.length != 0 && validation_errors.docUrl != null){ %>
-                                        <div class="error-feedback" style="display: block;">
-                                            <span><%= validation_errors.docUrl %></span>
-                                        </div>
-                                    <% } %>
                                 </div>
 
                                 <div class="add_spec_fieldset">
@@ -183,22 +157,25 @@
                                 </div>
                                 <div class="addAttrib">
                                     <div class="col-12 my-2">
-                                        <div class="form-row">
-                                            <div class="col-md-6 col-sm-12 mb-4">
-                                                <label for="Attribute_name">عنوان ویژگی</label>
-                                                <input type="text" class="form-control" id="Attribute_name" name="attribNames" required>
+                                        <% attrs.forEach( attr => { %>
+                                            <div class="form-row">
+                                                <div class="col-md-6 col-sm-12 mb-4">
+                                                    <label for="Attribute_name">عنوان ویژگی</label>
+                                                    <input type="text" class="form-control" id="Attribute_name" name="attribNames" required value="<%= attr[0] %>">
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 mb-4">
+                                                    <label for="Attribute_value">مقدار ویژگی</label>
+                                                    <input type="text" class="form-control" id="Attribute_value" name="attribValues" required value="<%= attr[1] %>">
+                                                </div>
                                             </div>
-                                            <div class="col-md-6 col-sm-12 mb-4">
-                                                <label for="Attribute_value">مقدار ویژگی</label>
-                                                <input type="text" class="form-control" id="Attribute_value" name="attribValues" required>
-                                            </div>
-                                        </div>
+                                        <% }) %>
                                     </div>
                                 </div>
+                                <input type="hidden" name="product_id" value="<%= product.id %>">
 
                                 <div class="row my-4">
-                                    <button type="submit" class="btn blue-gradient btn-block waves-effect" name="btn_send_product" id="send_product_frm_submit">
-                                        ثبت <i class="material-icons align-middle">refresh</i>
+                                    <button type="submit" class="btn blue-gradient btn-block waves-effect" name="btn_edit_product" id="edit_product_frm_submit">
+                                        ویرایش <i class="material-icons align-middle">refresh</i>
                                     </button>
                                 </div>
                             </form>
@@ -210,6 +187,28 @@
     </div>
 
 </main>
+
+
+<!-- Delete Modal -->
+<div class="modal fade" id="del_modal" tabindex="-1" role="dialog" aria-labelledby="del_modal_label"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="del_modal_label">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="#" class="btn btn-primary" id="del_modal_submit_btn">yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal -->
+
 
 <%- include ("../layouts/dashboard/footer") %>
 
