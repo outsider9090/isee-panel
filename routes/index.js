@@ -42,7 +42,7 @@ router.post('/remove_document' , function (req, res) {
 router.post('/delete_product' , function (req, res) {
   let product_id = req.body.product_id;
   const query = {
-    text: 'DELETE FROM xproducts WHERE id=$1',
+    text: 'DELETE FROM '+ PRODUCT_TABLE_NAME +' WHERE id=$1',
     values: [product_id],
   };
   client.query(query, (err, response) => {

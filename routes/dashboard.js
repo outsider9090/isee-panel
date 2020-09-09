@@ -34,14 +34,14 @@ router.get('/products', function(req, res, next) {
         return size;
     }
     const query0 = {
-        text: 'select * from xproducts WHERE user_id=$1',
+        text: 'select * from '+ PRODUCT_TABLE_NAME +' WHERE user_id=$1',
         values: [req.user.id],
     };
     client.query(query0, (err, resp) => {
         itemCount = objectSize(resp.rows);
     });
     const query = {
-        text: 'SELECT * FROM xproducts WHERE user_id=$1 limit $2 offset $3',
+        text: 'SELECT * FROM '+ PRODUCT_TABLE_NAME +' WHERE user_id=$1 limit $2 offset $3',
         values: [req.user.id, req.query.limit , req.skip],
     };
     client.query(query, (err, response) => {
@@ -80,7 +80,7 @@ router.get('/products/search/:query' , function (req , res) {
         return size;
     }
     const query0 = {
-        text: 'select * from xproducts WHERE partnumber like $1 AND user_id=$2 ',
+        text: 'select * from '+ PRODUCT_TABLE_NAME +' WHERE partnumber like $1 AND user_id=$2 ',
         values: ['%' + req.params.query + '%' , req.user.id]
     };
     client.query(query0, (err, resp) => {
@@ -88,7 +88,7 @@ router.get('/products/search/:query' , function (req , res) {
     });
 
     const query = {
-        text: 'select * from xproducts WHERE partnumber like $1 AND user_id=$2 limit $3 offset $4',
+        text: 'select * from '+ PRODUCT_TABLE_NAME +' WHERE partnumber like $1 AND user_id=$2 limit $3 offset $4',
         values: ['%' + req.params.query + '%' , req.user.id, req.query.limit , req.skip]
     };
     client.query(query, (err, response) => {

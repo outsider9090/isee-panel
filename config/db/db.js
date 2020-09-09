@@ -15,6 +15,8 @@ const client = new Client({
 });
 client.connect();
 
+global.PRODUCT_TABLE_NAME = 'xproducts';
+global.USERS_TABLE_NAME = 'users';
 
 
 module.exports = {
@@ -23,3 +25,5 @@ module.exports = {
         return client.query(text, params, callback)
     }
 };
+
+

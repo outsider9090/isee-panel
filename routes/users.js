@@ -35,7 +35,7 @@ router.post('/signup' ,[
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(password, salt, function(err, hash) {
                 const query = {
-                    text: 'INSERT INTO users (email,password) VALUES($1,$2)',
+                    text: 'INSERT INTO '+ USERS_TABLE_NAME +' (email,password) VALUES($1,$2)',
                     values: [email,hash],
                 };
                 client.query(query, (err, response) => {
@@ -65,7 +65,7 @@ passport.serializeUser(function(user, cb) {
     cb(null, user.id);
 });
 passport.deserializeUser((id, cb) => {
-    client.query('SELECT id, email FROM users WHERE id = $1', [parseInt(id, 10)], (err, results) => {
+    client.query('SELECT id, email FROM '+ USERS_TABLE_NAME +' WHERE id = $1', [parseInt(id, 10)], (err, results) => {
         if(err) {
             console.log('err: ' + err);
             throw err;
@@ -75,7 +75,7 @@ passport.deserializeUser((id, cb) => {
 });
 passport.use(new LocalStrategy({usernameField:"email", passwordField:"password"} , function (username, password, cb) {
     const query = {
-        text: 'select id,email,password FROM users WHERE email=$1',
+        text: 'select id,email,password FROM '+ USERS_TABLE_NAME +' WHERE email=$1',
         values: [username],
     };
     client.query(query, (err, response) => {

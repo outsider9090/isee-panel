@@ -134,7 +134,7 @@ router.post('/add',function (req, res) {
                 const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
                 const sij_json = '{' + image_json + ','  + docs_json + '}';
                 const query = {
-                    text: 'insert into xproducts(partnumber, description, detaileddescription,sij,dkj,user_id) VALUES($1,$2,$3,$4,$5,$6)',
+                    text: 'insert into '+ PRODUCT_TABLE_NAME +'(partnumber, description, detaileddescription,sij,dkj,user_id) VALUES($1,$2,$3,$4,$5,$6)',
                     values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,req.user.id ],
                 };
                 client.query(query, (err, response) => {
@@ -191,7 +191,7 @@ router.post('/add',function (req, res) {
 router.get('/edit/:product_id' , function (req,res) {
     images_src = [];
     const query = {
-        text: 'SELECT * FROM xproducts WHERE id=$1',
+        text: 'SELECT * FROM '+ PRODUCT_TABLE_NAME +' WHERE id=$1',
         values: [req.params.product_id],
     };
     client.query(query, (err, response) => {
@@ -358,7 +358,7 @@ router.post('/update',function (req, res) {
                 const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
                 const sij_json = '{' + image_json + ','  + docs_json + '}';
                 const query = {
-                    text: 'UPDATE xproducts SET partnumber=$1,description=$2,detaileddescription=$3,sij=$4,dkj=$5  WHERE id=$6 ',
+                    text: 'UPDATE '+ PRODUCT_TABLE_NAME +' SET partnumber=$1,description=$2,detaileddescription=$3,sij=$4,dkj=$5  WHERE id=$6 ',
                     values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,product_id[0]],
                 };
                 client.query(query, (err, response) => {
