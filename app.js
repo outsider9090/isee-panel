@@ -7,8 +7,15 @@ let logger = require('morgan');
 let flash = require('express-flash');
 let passport = require('passport');
 const { requiresLogin } = require('./config/middlewares/auth');
+let paginate = require('express-paginate');
 
 
+
+// Init App
+let app = express();
+
+// Paginate
+app.use(paginate.middleware(2, 10));
 
 
 // Route Files
@@ -18,9 +25,6 @@ let dashboardRouter = require('./routes/dashboard');
 let productsdRouter = require('./routes/products');
 
 
-// Init App
-let app = express();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -28,12 +32,10 @@ app.set('view engine', 'ejs');
 // Logger
 app.use(logger('dev'));
 
-
 // Body Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -68,21 +70,13 @@ app.use('/dashboard' , requiresLogin , dashboardRouter);
 app.use('/products', productsdRouter);
 
 
-// //catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//     next(createError(404));
-// });
-
-// error handler
-// app.use(function(err, req, res, next) {
-//     // set locals, only providing error in development
-//     res.locals.message = err.message;
-//     res.locals.error = req.app.get('env') === 'development' ? err : {};
-//     // render the error page
-//     res.status(err.status || 500);
-//     res.render('error');
-// });
-
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+	// var err = new Error('Not Found');
+	// err.status = 404;
+	// next(err);
+	res.render('site/404');
+});
 
 
 app.set('port', (process.env.PORT || 3000));

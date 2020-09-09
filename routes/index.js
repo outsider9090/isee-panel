@@ -8,6 +8,9 @@ let client = require('../config/db/db');
 router.get('/', function(req, res, next) {
   res.render('site/index', { title: 'Home' });
 });
+router.get('/403', function(req, res, next) {
+  res.render('site/403');
+});
 
 
 /* Ajaxes */

@@ -93,10 +93,11 @@
                                 <div class="addImage">
                                     <div class="col-12 my-2">
                                         <% images.forEach( image => { %>
+                                        <% let split_name = image.split("/"); %>
                                             <div class="form-row file-field ">
                                                 <div class="file-path-wrapper">
                                                     <input class="file-path validate" type="text" name="old_part_image"
-                                                           placeholder="آپلود تصویر" value="<%= image %>">
+                                                           placeholder="آپلود تصویر" value="<%= split_name[5] %>">
                                                 </div>
                                                 <a class="btn-floating btn-md purple-gradient mt-0 float-left">
                                                     <i class="material-icons">cloud_upload</i>
@@ -121,6 +122,8 @@
                                 <div class="addDocument">
                                     <div class="col-12 my-2">
                                         <% docs.forEach( doc => { %>
+                                            <% let split_src = doc[1]['Url'].split("/"); %>
+
                                             <div class="form-row">
                                                 <div class="col-md-6 col-sm-12 mb-4">
                                                     <label for="Doc_type">نوع سند</label>
@@ -132,7 +135,7 @@
                                                 </div>
                                                 <div class="form-row file-field col-12">
                                                     <div class="file-path-wrapper">
-                                                        <input class="file-path validate" type="text" placeholder="آپلود فایل" value="<%= doc[1]['Url'] %>" name="oldDocUrl">
+                                                        <input class="file-path validate" type="text" placeholder="آپلود فایل" value="<%= split_src[5] %>" name="oldDocUrl">
                                                     </div>
                                                     <a class="btn-floating btn-md purple-gradient mt-0 float-left">
                                                         <i class="material-icons">cloud_upload</i>

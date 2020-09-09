@@ -3,7 +3,6 @@ let router = express.Router();
 let { check, validationResult } = require('express-validator');
 const util = require('util');
 const bcrypt = require('bcryptjs');
-let Regex = require("regex");
 let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
 let client = require('../config/db/db');
@@ -32,7 +31,7 @@ router.post('/signup' ,[
         req.session.sessionFlash = {type:'signupError', message: 'مشکل در ثبت نام!'};
         res.redirect('/');
     }else {
-        console.log(util.inspect('No error'));
+        //console.log(util.inspect('No error'));
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(password, salt, function(err, hash) {
                 const query = {

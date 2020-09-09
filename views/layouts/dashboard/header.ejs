@@ -49,7 +49,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-lg-left dropdown-secondary"
                              aria-labelledby="navbarDropdownMenuLink-55">
-                            <span class="dropdown-item">سلام کاربر جدید</span>
+                            <!--<span class="dropdown-item">سلام کاربر جدید</span>-->
                             <a class="dropdown-item" href="/users/logout">خروج</a>
                         </div>
                     </li>
@@ -65,13 +65,13 @@
             <img src="/assets/images/logo.png" class="img-fluid" alt="">
         </a>
         <div class="list-group list-group-flush">
-            <a href="/dashboard" class="list-group-item active waves-effect">
+            <a href="/dashboard" class="list-group-item list-group-item-action waves-effect <%= page_name === 'dashboard' && 'active' %>">
                 پیشخوان
             </a>
-            <a href="/dashboard/add_product" class="list-group-item list-group-item-action waves-effect">
+            <a href="/dashboard/add_product" class="list-group-item list-group-item-action waves-effect <%= page_name === 'addProduct' && 'active' %>">
                 ارسال محصول
             </a>
-            <a href="/dashboard/products" class="list-group-item list-group-item-action waves-effect">
+            <a href="/dashboard/products" class="list-group-item list-group-item-action waves-effect <%= page_name === 'productsList' && 'active' %>">
                 لیست محصولات
             </a>
         </div>

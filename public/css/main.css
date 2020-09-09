@@ -349,7 +349,6 @@ nav#site_navbar {
   margin: auto;
 }
 .send_product_frm .form-row {
-  width: 90%;
   margin: auto;
 }
 .send_product_frm .form_title {
@@ -372,6 +371,7 @@ nav#site_navbar {
 }
 .send_product_frm .file-path {
   text-align: center;
+  direction: ltr;
 }
 .send_product_frm .file-path-wrapper {
   width: 90%;
@@ -429,8 +429,35 @@ nav#site_navbar {
   font-size: 20px;
 }
 
+.products_list_table .title {
+  text-align: right;
+  padding: 8px 15px;
+}
+.products_list_table .table_container {
+  text-align: center;
+}
+
+.dropdown-menu span {
+  text-align: center;
+}
+.dropdown-menu a {
+  text-align: center;
+}
+
+form#search_products #search_query_submit {
+  position: absolute;
+  top: 0;
+  left: -5px;
+  background-color: transparent;
+  border: none;
+}
+
 /*----------------------------Media Queries----------------------------*/
 @media screen and (max-width: 1200px) {
+  nav {
+    right: 0 !important;
+  }
+
   .sidebar-fixed {
     display: none;
   }

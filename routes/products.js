@@ -11,7 +11,10 @@ let async  = require("async");
 
 
 router.get('/add',function () {
-    res.render('dashboard/add_product', {validation_errors: '' });
+    res.render('dashboard/add_product', {
+        page_name: 'addProduct',
+        validation_errors: ''
+    });
 });
 
 
@@ -132,7 +135,7 @@ router.post('/add',function (req, res) {
                 const sij_json = '{' + image_json + ','  + docs_json + '}';
                 const query = {
                     text: 'insert into xproducts(partnumber, description, detaileddescription,sij,dkj,user_id) VALUES($1,$2,$3,$4,$5,$6)',
-                    values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,req.user.id],
+                    values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,req.user.id ],
                 };
                 client.query(query, (err, response) => {
                     if (err) {
@@ -202,6 +205,7 @@ router.get('/edit/:product_id' , function (req,res) {
 
             res.render('dashboard/edit_product' , {
                 title: 'ویرایش محصول',
+                page_name: 'addProduct',
                 validation_errors : '',
                 product : response.rows[0],
                 images : json_parse['Image'],
@@ -416,22 +420,6 @@ router.post('/update',function (req, res) {
 });
 
 
-// router.get('/delete/:product_id' , function (req,res) {
-//     const query = {
-//         text: 'DELETE FROM xproducts WHERE id=$1',
-//         values: [req.params.product_id],
-//     };
-//     client.query(query, (err, response) => {
-//         if (err) {
-//             console.log(err.stack);
-//             //req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
-//             res.redirect('/dashboard');
-//         } else {
-//             //req.session.sessionFlash = {type: 'addSuccessMsg', message: 'محصول اضافه شد.'};
-//             res.redirect('/dashboard/products');
-//         }
-//     });
-// });
 
 
 module.exports = router;
