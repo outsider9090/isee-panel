@@ -52,14 +52,19 @@ router.get('/products', function(req, res, next) {
             let products = response.rows;
             const pageCount = Math.ceil(itemCount / req.query.limit);
 
+            console.log('sdsd: ' + req.query.currentPage);
+
             res.render('dashboard/products', {
-                title: 'لیست محصولات',
+                title: 'Products List',
                 page_name: 'productsList',
                 products: products,
                 pageCount,
                 itemCount,
+                currentPage : req.query.page,
                 pages: paginate.getArrayPages(req)('', pageCount, req.query.page)
             });
+
+           // res.send(req.query);
         }
     });
 
@@ -95,11 +100,12 @@ router.get('/products/search/:query' , function (req , res) {
             const pageCount = Math.ceil(itemCount / req.query.limit);
 
             res.render('dashboard/products', {
-                title: 'لیست محصولات',
+                title: 'Products List',
                 page_name: 'productsList',
                 products: products,
                 pageCount,
                 itemCount,
+                currentPage : req.query.page,
                 pages: paginate.getArrayPages(req)('', pageCount, req.query.page)
             });
         }

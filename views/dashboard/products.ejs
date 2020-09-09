@@ -110,38 +110,29 @@
                                         </tbody>
                                     </table>
 
-                                    <!--<nav aria-label="Page navigation example">-->
-                                    <!--<ul class="pagination pg-blue">-->
-                                    <!--<% if (pages){ %>-->
-                                    <!--<% pages.forEach( page => { %>-->
-                                    <!--<a href="<%= page.url %>" class="page-link active"><%= page.number %></a>-->
-                                    <!--<% }) %>-->
-                                    <!--<% } %>-->
-                                    <!--</ul>-->
-                                    <!--</nav>-->
-
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination pg-blue">
-                                            <li class="page-item ">
-                                                <a class="page-link" tabindex="-1">قبلی</a>
-                                            </li>
-                                            <% if (pages){ %>
-                                                <% pages.forEach( page => { %>
-                                                    <li class="page-item">
-                                                        <a href="<%= page.url %>" class="page-link"><%= page.number %></a>
+                                    <% if (pageCount > 1) { %>
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination pg-blue">
+                                                <% if (currentPage !== 1){ %>
+                                                    <li class="page-item ">
+                                                        <a href="<%= paginate.href(true) %>" class="page-link" tabindex="-1">صفحه قبل</a>
                                                     </li>
-                                                <% }) %>
-                                            <% } %>
-                                            <!--<li class="page-item"><a class="page-link">1</a></li>-->
-                                            <!--<li class="page-item active">-->
-                                            <!--<a class="page-link">2 <span class="sr-only">(current)</span></a>-->
-                                            <!--</li>-->
-                                            <!--<li class="page-item"><a class="page-link">3</a></li>-->
-                                            <li class="page-item ">
-                                                <a class="page-link">بعدی</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
+                                                <% } %>
+                                                <% if (pages){ %>
+                                                    <% pages.forEach( page => { %>
+                                                        <li class="page-item <%= currentPage === page.number && 'active' %>">
+                                                            <a href="<%= page.url %>" class="page-link"><%= page.number %></a>
+                                                        </li>
+                                                    <% }) %>
+                                                <% } %>
+                                                <% if (currentPage !== pageCount){ %>
+                                                    <li class="page-item ">
+                                                        <a href="<%= paginate.href() %>" class="page-link" tabindex="-1">صفحه بعد</a>
+                                                    </li>
+                                                <% } %>
+                                            </ul>
+                                        </nav>
+                                    <% } %>
 
                                 </div>
                             </div>

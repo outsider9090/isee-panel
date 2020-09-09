@@ -8,6 +8,8 @@ let flash = require('express-flash');
 let passport = require('passport');
 const { requiresLogin } = require('./config/middlewares/auth');
 let paginate = require('express-paginate');
+let compression = require('compression');
+let favicon = require('serve-favicon');
 
 
 
@@ -15,7 +17,10 @@ let paginate = require('express-paginate');
 let app = express();
 
 // Paginate
-app.use(paginate.middleware(2, 10));
+app.use(paginate.middleware(10, 50));
+
+// Optimization
+app.use(compression()); //Compress all routes
 
 
 // Route Files
@@ -28,6 +33,7 @@ let productsdRouter = require('./routes/products');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 // Logger
 app.use(logger('dev'));
@@ -62,8 +68,6 @@ app.use(function(req, res, next){
 // Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/dashboard' , requiresLogin , dashboardRouter);
@@ -72,9 +76,6 @@ app.use('/products', productsdRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-	// var err = new Error('Not Found');
-	// err.status = 404;
-	// next(err);
 	res.render('site/404');
 });
 

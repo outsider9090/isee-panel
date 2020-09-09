@@ -92,8 +92,8 @@
                                 </div>
                                 <div class="addImage">
                                     <div class="col-12 my-2">
-                                        <% images.forEach( image => { %>
-                                        <% let split_name = image.split("/"); %>
+                                        <% images.forEach( img => { %>
+                                        <% let split_name = img.split("/"); %>
                                             <div class="form-row file-field ">
                                                 <div class="file-path-wrapper">
                                                     <input class="file-path validate" type="text" name="old_part_image"
@@ -104,7 +104,7 @@
                                                     <input type="file" id="Image" accept="image/*">
                                                 </a>
                                                 <a class="btn-floating btn-sm deep-orange removeImage"
-                                                   data-src="<%= image %>">
+                                                   data-src="<%= img %>">
                                                     <i class="material-icons align-middle">remove</i>
                                                 </a>
                                             </div>
@@ -123,7 +123,6 @@
                                     <div class="col-12 my-2">
                                         <% docs.forEach( doc => { %>
                                             <% let split_src = doc[1]['Url'].split("/"); %>
-
                                             <div class="form-row">
                                                 <div class="col-md-6 col-sm-12 mb-4">
                                                     <label for="Doc_type">نوع سند</label>
@@ -141,11 +140,12 @@
                                                         <i class="material-icons">cloud_upload</i>
                                                         <input type="file" id="Doc_url" accept="application/pdf">
                                                     </a>
+                                                    <a class="btn-floating btn-sm deep-orange removeDoc"
+                                                       data-src="<%= doc[1]['Url'] %>">
+                                                        <i class="material-icons align-middle">remove</i>
+                                                    </a>
                                                 </div>
-                                                <a class="btn-floating btn-sm deep-orange removeDoc"
-                                                   data-src="<%= doc[1]['Url'] %>">
-                                                    <i class="material-icons align-middle">remove</i>
-                                                </a>
+
                                             </div>
                                         <% }) %>
                                     </div>
