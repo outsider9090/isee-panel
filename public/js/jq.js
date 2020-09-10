@@ -7,6 +7,7 @@ const loginError = document.getElementById("login_error").value;
 const signupError = document.getElementById("register_error").value;
 const SignupSuccess = document.getElementById("register_success").value;
 const logoutSuccess = document.getElementById("logout_success").value;
+const deleteSuccessMsg = document.getElementById("delete_success_msg").value;
 
 
 jQuery(document).ready(function ($) {
@@ -195,16 +196,17 @@ jQuery(document).ready(function ($) {
     $('.delete_product').click(function (e) {
         e.preventDefault();
         let product_id = $(this).data('id');
+        let product_number = $(this).data('pnumber');
 
         if (confirm('از حذف این محصول اطمینان دارید؟')){
             $.ajax({
                 url: '/delete_product',
                 type: 'POST',
-                data: { 'product_id':product_id },
+                data: { 'product_id':product_id ,'product_number':product_number  },
                 dataType: 'JSON',
                 success: function (data) {
                     if (data['msg'] === 1){
-                        //alert('deleted');
+                        alert('محصول پاک شد.');
                         window.location.reload();
                     } else {
                         alert(data['msg']);
@@ -216,6 +218,7 @@ jQuery(document).ready(function ($) {
         }
 
     });
+
 
     $('.removeImage').click(function () {
         let thisElement = $(this);
@@ -252,7 +255,7 @@ jQuery(document).ready(function ($) {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data['msg'] === 1){
-                        thisElement.parent().remove();
+                        thisElement.parent('.form-row').remove();
                     } else {
                         alert(data['msg']);
                     }

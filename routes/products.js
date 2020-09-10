@@ -7,7 +7,7 @@ let path = require('path');
 let validator = require("validator");
 let util = require("util");
 let client = require('../config/db/db');
-let async  = require("async");
+let esclient = require('../config/db/elasticssearch');
 
 
 router.get('/add',function () {
@@ -134,15 +134,27 @@ router.post('/add',function (req, res) {
                 const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
                 const sij_json = '{' + image_json + ','  + docs_json + '}';
                 const query = {
-                    text: 'insert into '+ PRODUCT_TABLE_NAME +'(partnumber, description, detaileddescription,sij,dkj,user_id) VALUES($1,$2,$3,$4,$5,$6)',
-                    values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,req.user.id ],
+                    text: 'insert into '+ PRODUCT_TABLE_NAME +'(pkey,dkpartnumber,partnumber, description, detaileddescription,sij,dkj,user_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8)',
+                    values: [0,partnumber[0],partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,req.user.id ],
                 };
                 client.query(query, (err, response) => {
                     if (err) {
-                        //console.log(err.stack);
+                        console.log(err.stack);
                         req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
                         res.redirect('/dashboard/add_product');
                     } else {
+                        // Add to elastic search
+                        esclient.index({
+                            index: ES_INDEX,
+                            type: ES_TYPE,
+                            body: {
+                                "partnumber" : partnumber[0],
+                                "description" : description[0],
+                                "detaileddescription" : detaileddescription[0],
+                                "sij" : sij_json,
+                                "dkj" : dkj_json
+                            }
+                        });
                         //console.log(response.rows[0]);
                         req.session.sessionFlash = {type: 'addSuccessMsg', message: 'محصول اضافه شد.'};
                         res.redirect('/dashboard/add_product');
@@ -218,14 +230,13 @@ router.get('/edit/:product_id' , function (req,res) {
 
 
 router.post('/update',function (req, res) {
-    console.log('sada');
     let form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
+        let oldpartnumber = fields.old_part_number;
         let partnumber = fields.partnumber;
         let description = fields.description;
         let detaileddescription = fields.detaileddescription;
         let product_id = fields.product_id;
-
 
         const errors = new Object();
         if (validator.equals(partnumber[0],''))
@@ -338,12 +349,8 @@ router.post('/update',function (req, res) {
             if (attr_names[i] === ''){counter++;}
             attr_array[attr_names[i]] = attr_values[i];
         }
-        if (counter === 0){
             attr_json = '"Attributes":' + json_encode(attr_array) ;
             attr_json = attr_json.replace(/\[/g, "").replace(/\]/g, "");
-        }else {
-            attr_json = '';
-        }
 
 
         if (! isEmpty(errors)){
@@ -382,7 +389,37 @@ router.post('/update',function (req, res) {
                                 }
                             });
                         }
-                        //console.log(response.rows[0]);
+                        // Add to elastic search
+                        let product_id = 0;
+                        esclient.search({
+                            index: ES_INDEX,
+                            type: ES_TYPE,
+                            body:{
+                                "query": {
+                                    "match": {
+                                        "partnumber": oldpartnumber[0]
+                                    }
+                                }
+                            }
+                        }).then(function(resp) {
+                            product_id =resp.hits.hits[0]._id;
+                            esclient.update({
+                                index: ES_INDEX,
+                                type: ES_TYPE,
+                                id: product_id,
+                                body: {
+                                    doc:{
+                                        "partnumber" : partnumber[0],
+                                        "description" : description[0],
+                                        "detaileddescription" : detaileddescription[0],
+                                        "sij" : sij_json,
+                                        "dkj" : dkj_json
+                                    }
+                                }
+                            });
+                        }, function(err) {
+                            console.trace(err.message);
+                        });
                         req.session.sessionFlash = {type: 'editSuccessMsg', message: 'محصول ویرایش شد.'};
                         res.redirect('/dashboard/products');
                     }

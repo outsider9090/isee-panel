@@ -5,7 +5,6 @@ let util = require('util');
 let paginate = require('express-paginate');
 
 
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('dashboard/dashboard', {
@@ -22,7 +21,6 @@ router.get('/add_product', function(req, res, next) {
         old_values : ''
     });
 });
-
 
 router.get('/products', function(req, res, next) {
     let itemCount = 0;
@@ -41,7 +39,7 @@ router.get('/products', function(req, res, next) {
         itemCount = objectSize(resp.rows);
     });
     const query = {
-        text: 'SELECT * FROM '+ PRODUCT_TABLE_NAME +' WHERE user_id=$1 limit $2 offset $3',
+        text: 'SELECT * FROM '+ PRODUCT_TABLE_NAME +' WHERE user_id=$1 ORDER BY id DESC limit $2 offset $3 ',
         values: [req.user.id, req.query.limit , req.skip],
     };
     client.query(query, (err, response) => {
@@ -88,7 +86,7 @@ router.get('/products/search/:query' , function (req , res) {
     });
 
     const query = {
-        text: 'select * from '+ PRODUCT_TABLE_NAME +' WHERE partnumber like $1 AND user_id=$2 limit $3 offset $4',
+        text: 'select * from '+ PRODUCT_TABLE_NAME +' WHERE partnumber like $1 AND user_id=$2 ORDER BY id DESC limit $3 offset $4',
         values: ['%' + req.params.query + '%' , req.user.id, req.query.limit , req.skip]
     };
     client.query(query, (err, response) => {
