@@ -50,8 +50,6 @@ router.get('/products', function(req, res, next) {
             let products = response.rows;
             const pageCount = Math.ceil(itemCount / req.query.limit);
 
-            console.log('sdsd: ' + req.query.currentPage);
-
             res.render('dashboard/products', {
                 title: 'Products List',
                 page_name: 'productsList',

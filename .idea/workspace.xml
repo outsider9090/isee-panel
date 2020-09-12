@@ -2,48 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="73d8a3e7-7d06-47cf-8613-14a1e76c6cd1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/config/db/elasticssearch.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/jq.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/jq.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599565371579-2.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599566844250-3.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599631120317-1.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599639807155-3.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599639831219-2.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599639899547-2.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599639927268-2.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599649130772-1.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599649130772-2.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599649155390-2.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599649192964-2.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599650874061-3.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599650985687-3.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599651230548-3.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599565371578-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599565371579-2020-08-27_124233.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599566882278-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599631120317-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599639807154-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599639831219-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599639899546-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599639927267-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599649130771-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599649130771-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599649155390-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599649192964-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599649249060-1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599650874061-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599650985687-2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599651230548-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599723956009-2.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599724435433-2.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599724492331-3.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599725046163-2.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599725764235-2.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599726584201-1.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599726584201-2.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599726690146-1.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599726749838-3.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/documents/1599727340162-3.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599723956008-1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599724492331-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599725046163-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599725764234-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599726584200-1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599726584200-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599726690145-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599726749838-2020-08-27_124233.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599727340161-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/uploads/images/1599727340162-1.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/dashboard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/products.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/products.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/dashboard/edit_product.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/dashboard/edit_product.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/dashboard/products.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/dashboard/products.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layouts/dashboard/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/layouts/dashboard/header.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layouts/site/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/layouts/site/header.ejs" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -56,13 +39,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="69" lean-forward="true" selection-start-line="69" selection-end-line="69" />
+            <state relative-caret-position="1622">
+              <caret line="71" column="29" selection-start-line="71" selection-start-column="18" selection-end-line="71" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/routes/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="312">
+              <caret line="82" column="11" lean-forward="true" selection-start-line="82" selection-start-column="11" selection-end-line="82" selection-end-column="11" />
               <folding>
-                <element signature="e#634#2001#0" />
+                <element signature="e#494#711#0" />
               </folding>
             </state>
           </provider>
@@ -71,17 +63,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/products.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-8605">
-              <caret line="10" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="281">
+              <caret line="375" column="28" lean-forward="true" selection-start-line="375" selection-start-column="28" selection-end-line="375" selection-end-column="28" />
+              <folding>
+                <element signature="e#393#509#0" />
+                <element signature="e#553#7820#0" />
+                <element signature="e#7877#8739#0" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.js">
+        <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1296">
-              <caret line="71" column="29" selection-start-line="71" selection-start-column="18" selection-end-line="71" selection-end-column="29" />
+            <state relative-caret-position="292">
+              <caret line="51" selection-start-line="51" selection-end-line="51" />
+              <folding>
+                <element signature="e#408#580#0" />
+                <element signature="e#2064#3442#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -89,10 +90,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/dashboard/products.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="120" column="64" selection-start-line="120" selection-start-column="64" selection-end-line="120" selection-end-column="64" />
+            <state relative-caret-position="1051">
+              <caret line="53" column="69" selection-start-line="53" selection-start-column="69" selection-end-line="53" selection-end-column="69" />
               <folding>
-                <element signature="e#1087#1969#0#JavaScript" />
+                <element signature="e#2042#2929#0#JavaScript" />
               </folding>
             </state>
           </provider>
@@ -101,7 +102,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/dashboard/edit_product.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="446">
+            <state relative-caret-position="3528">
               <caret line="147" column="52" selection-start-line="147" selection-start-column="52" selection-end-line="147" selection-end-column="52" />
             </state>
           </provider>
@@ -110,12 +111,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/jq.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="195" column="44" lean-forward="true" selection-start-line="195" selection-start-column="44" selection-end-line="195" selection-end-column="44" />
-              <folding>
-                <element signature="e#9889#10649#0" />
-                <element signature="e#10690#11409#0" />
-              </folding>
+            <state relative-caret-position="-816">
+              <caret line="208" selection-start-line="208" selection-end-line="208" />
             </state>
           </provider>
         </entry>
@@ -131,7 +128,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>old_values</find>
       <find>user:</find>
       <find>render</find>
       <find>path</find>
@@ -161,6 +157,7 @@
       <find>myproducts21</find>
       <find>type: '_doc'</find>
       <find>images_src</find>
+      <find>sdsd:</find>
     </findStrings>
     <replaceStrings>
       <replace>let</replace>
@@ -198,12 +195,12 @@
         <option value="$PROJECT_DIR$/views/layouts/dashboard/header.ejs" />
         <option value="$PROJECT_DIR$/views/layouts/site/header.ejs" />
         <option value="$PROJECT_DIR$/routes/products.js" />
-        <option value="$PROJECT_DIR$/routes/dashboard.js" />
-        <option value="$PROJECT_DIR$/routes/index.js" />
-        <option value="$PROJECT_DIR$/views/dashboard/products.ejs" />
         <option value="$PROJECT_DIR$/config/db/elasticssearch.js" />
         <option value="$PROJECT_DIR$/views/dashboard/edit_product.ejs" />
         <option value="$PROJECT_DIR$/public/js/jq.js" />
+        <option value="$PROJECT_DIR$/views/dashboard/products.ejs" />
+        <option value="$PROJECT_DIR$/routes/dashboard.js" />
+        <option value="$PROJECT_DIR$/routes/index.js" />
       </list>
     </option>
   </component>
@@ -407,7 +404,8 @@
       <workItem from="1599565537691" duration="1429000" />
       <workItem from="1599625855115" duration="15624000" />
       <workItem from="1599645239151" duration="9090000" />
-      <workItem from="1599711124483" duration="15266000" />
+      <workItem from="1599711124483" duration="16668000" />
+      <workItem from="1599883645950" duration="3176000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1598253315272</created>
@@ -434,13 +432,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="214354000" />
+    <option name="totallyTimeSpent" value="218932000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1975764" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1975764" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -454,7 +452,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32997763" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.36241612" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.36241612" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -512,16 +510,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="finished form validation" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/views/dashboard/dashboard.hbs" />
-    <entry file="file://$PROJECT_DIR$/node_modules/express-validator/src/chain/index.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/uploads/images/1.png" />
-    <entry file="file://$PROJECT_DIR$/public/uploads/images/2020-08-23_164445.jpg" />
-    <entry file="file://$PROJECT_DIR$/views/error.ejs">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/uploads/images/img.png" />
     <entry file="file://$PROJECT_DIR$/public/uploads/images/1599107718664-img.png" />
     <entry file="file://$PROJECT_DIR$/public/uploads/images/1599108092580-img.png" />
     <entry file="file://$PROJECT_DIR$/public/css/style.css" />
@@ -666,9 +654,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/uploads/images/1599565371578-1.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/public/uploads/images/1599565371578-1.png" />
     <entry file="file://$PROJECT_DIR$/views/layouts/dashboard/header.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
@@ -680,48 +666,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="303">
           <caret line="64" column="71" selection-start-line="64" selection-start-column="71" selection-end-line="64" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="53" column="11" selection-start-line="53" selection-start-column="11" selection-end-line="53" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/dashboard/products.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="120" column="64" selection-start-line="120" selection-start-column="64" selection-end-line="120" selection-end-column="64" />
-          <folding>
-            <element signature="e#1087#1969#0#JavaScript" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/dashboard/edit_product.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="147" column="52" selection-start-line="147" selection-start-column="52" selection-end-line="147" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/jq.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="195" column="44" lean-forward="true" selection-start-line="195" selection-start-column="44" selection-end-line="195" selection-end-column="44" />
-          <folding>
-            <element signature="e#9889#10649#0" />
-            <element signature="e#10690#11409#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1296">
-          <caret line="71" column="29" selection-start-line="71" selection-start-column="18" selection-end-line="71" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -749,19 +693,84 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/products.js">
+    <entry file="file://$PROJECT_DIR$/views/dashboard/edit_product.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8605">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="3528">
+          <caret line="147" column="52" selection-start-line="147" selection-start-column="52" selection-end-line="147" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/uploads/images/1599723956008-1.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/uploads/images/1599884176719-1.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1622">
+          <caret line="71" column="29" selection-start-line="71" selection-start-column="18" selection-end-line="71" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/uploads/images/1599884951345-1.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/uploads/images/1599885697928-1.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/uploads/images/1599884199193-2020-08-27_124233.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/dashboard/products.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1051">
+          <caret line="53" column="69" selection-start-line="53" selection-start-column="69" selection-end-line="53" selection-end-column="69" />
+          <folding>
+            <element signature="e#2042#2929#0#JavaScript" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/dashboard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="69" lean-forward="true" selection-start-line="69" selection-end-line="69" />
+        <state relative-caret-position="292">
+          <caret line="51" selection-start-line="51" selection-end-line="51" />
           <folding>
-            <element signature="e#634#2001#0" />
+            <element signature="e#408#580#0" />
+            <element signature="e#2064#3442#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/uploads/images/1599886173306-1.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/products.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="375" column="28" lean-forward="true" selection-start-line="375" selection-start-column="28" selection-end-line="375" selection-end-column="28" />
+          <folding>
+            <element signature="e#393#509#0" />
+            <element signature="e#553#7820#0" />
+            <element signature="e#7877#8739#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/jq.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-816">
+          <caret line="208" selection-start-line="208" selection-end-line="208" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="82" column="11" lean-forward="true" selection-start-line="82" selection-start-column="11" selection-end-line="82" selection-end-column="11" />
+          <folding>
+            <element signature="e#494#711#0" />
           </folding>
         </state>
       </provider>

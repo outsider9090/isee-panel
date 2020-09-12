@@ -206,7 +206,6 @@ jQuery(document).ready(function ($) {
                 dataType: 'JSON',
                 success: function (data) {
                     if (data['msg'] === 1){
-                        alert('محصول پاک شد.');
                         window.location.reload();
                     } else {
                         alert(data['msg']);
