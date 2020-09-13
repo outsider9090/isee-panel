@@ -5,6 +5,11 @@ let client = require('../config/db/db');
 let esclient = require('../config/db/elasticssearch');
 let fs = require('fs');
 let path = require('path');
+const b2CloudStorage = require('b2-cloud-storage');
+const SolidBucket = require('solid-bucket')
+
+
+
 
 
 /* GET home page. */
@@ -18,16 +23,24 @@ router.get('/403', function(req, res, next) {
 
 /* Ajaxes */
 global.images_src = [];
+global.images_ids = [];
 global.docs_src = [];
 
+
 router.post('/remove_image' , function (req, res) {
-  let image_name = req.body.img_name;
-  let result = images_src.push(image_name);
-  if (result){
-    res.json({msg:1});
-  } else {
-    res.json({msg:0});
-  }
+  //let image_name = req.body.img_name;
+  let img_id = req.body.img_id;
+
+  console.log('sadadadartertret: ' + img_id);
+  //res.json({msg:img_id});
+
+  // let result1 = images_src.push(image_name);
+  // let result2 = images_ids.push(image_id);
+  // if (result1 && result2){
+  //   res.json({msg:1});
+  // } else {
+  //   res.json({msg:0});
+  // }
 });
 
 router.post('/remove_document' , function (req, res) {
@@ -40,10 +53,13 @@ router.post('/remove_document' , function (req, res) {
   }
 });
 
+
 router.post('/delete_product' , function (req, res) {
   let product_id = req.body.product_id;
   let product_number = req.body.product_number;
   let imgs = [];
+  let imgs_ids = [];
+  let docs_ids = [];
   let docs = [];
   let appDir = path.dirname(require.main.filename);
 
@@ -59,7 +75,9 @@ router.post('/delete_product' , function (req, res) {
     } else {
       let json_parse = JSON.parse(response.rows[0].dkj);
       imgs = json_parse['Image'];
+      imgs_ids = JSON.parse(response.rows[0].bbimagesids);
       docs = Object.entries(json_parse['Documents']);
+      docs_ids = JSON.parse(response.rows[0].bbdocsids);
     }
   });
 
@@ -73,14 +91,38 @@ router.post('/delete_product' , function (req, res) {
       res.json({msg:response});
     } else {
       // delete product images
+      const b2 = new b2CloudStorage({
+        auth: {
+          accountId: BB_KEY_ID,
+          applicationKey: BB_APP_KEY
+        }
+      });
+
       imgs.forEach(img => {
-       console.log(util.inspect('imgs: ' + img));
-       let img_split = img.split('/');
-        fs.unlink( appDir +'\\public\\uploads\\images\\' + img_split[5] , (err) => {
-          if (err) {
-            console.error(err);
-          }
+        let img_split = img.split('/');
+        imgs_ids.forEach(img_id =>{
+          console.log('idddd: '+ img_id);
+          b2.authorize(function(err){
+            if(err){ throw err; }
+            console.log('dfffds: ' + BB_SITE_UPLOAD_URL + img_split[5]);
+            b2.deleteFileVersion( {
+              fileName: img_split[5],
+              fileId : img_id
+            }, function(err ,result){
+              if (err) {
+                console.log(err);
+              }else {
+                console.log('success');
+              }
+            });
+          });
         });
+
+        // fs.unlink( appDir +'\\public\\uploads\\images\\' + img_split[5] , (err) => {
+        //   if (err) {
+        //     console.error(err);
+        //   }
+        // });
       });
       // delete product docs
       let docsArray = [];
@@ -89,12 +131,27 @@ router.post('/delete_product' , function (req, res) {
       });
       docsArray.forEach(doc_src => {
         let src_split = doc_src.split('/');
-        fs.unlink( appDir +'\\public\\uploads\\documents\\' + src_split[5] , (err) => {
-          if (err) {
-            console.error(err);
-          }
+        docs_ids.forEach(doc_id =>{
+          console.log('idddd: '+ doc_id);
+          b2.authorize(function(err){
+            if(err){ throw err; }
+            b2.deleteFileVersion( {
+              fileName: src_split[5],
+              fileId : doc_id
+            }, function(err ,result){
+              if (err) {
+                console.log(err);
+              }else {
+                console.log('success');
+              }
+            });
+          });
         });
-        console.log(util.inspect('src: ' + doc_src));
+        // fs.unlink( appDir +'\\public\\uploads\\documents\\' + src_split[5] , (err) => {
+        //   if (err) {
+        //     console.error(err);
+        //   }
+        // });
       });
       // delete from elasticsearch
       let pid = 0;

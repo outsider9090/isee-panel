@@ -9,6 +9,12 @@ const esclient = new elasticsearch.Client({
 global.ES_INDEX = 'myproducts21';
 global.ES_TYPE = '_doc';
 
+global.BB_KEY_ID = '002a40660e78bfd0000000001';
+global.BB_APP_KEY = 'K002XRhYXLQ4J4WlJ1YofNPuPFRUs2s';
+global.BB_BUCKET_ID = 'ea9400e606908e17784b0f1d';
+global.BB_SITE_UPLOAD_URL = 'https://f002.backblazeb2.com/file/nodejs/';
+
+
 module.exports = {
     esclient,
     search: (text, params, callback) => {

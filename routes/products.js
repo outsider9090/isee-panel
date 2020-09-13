@@ -8,6 +8,8 @@ let validator = require("validator");
 let util = require("util");
 let client = require('../config/db/db');
 let esclient = require('../config/db/elasticssearch');
+const b2CloudStorage = require('b2-cloud-storage');
+
 
 
 router.get('/add',function () {
@@ -37,10 +39,13 @@ router.post('/add',function (req, res) {
             errors.description = 'لطفا توضیحات قطعه را وارد کنید!';
         }
 
+
         // Images
         let imgArray = files.part_image;
         let imageNames = [];
         let image_json = '';
+        let bb_images_ids = [];
+
         for (let j = 0; j < imgArray.length; j++) {
             let uploadImageOk = 1;
             let newPath = './public/uploads/images/';
@@ -52,11 +57,33 @@ router.post('/add',function (req, res) {
             if (uploadImageOk !== 0){
                 let hostname = req.headers.host;
                 let timeNow = Date.now();
-                newPath+=  timeNow + '-' + singleImg.originalFilename;
-                readAndWriteImage(singleImg, newPath);
-                imageNames.push('http://' + hostname + '/uploads/images/' + timeNow + '-' + imgArray[j].originalFilename);
+                // newPath+=  timeNow + '-' + singleImg.originalFilename;
+                // readAndWriteImage(singleImg, newPath);
+                const b2 = new b2CloudStorage({
+                    auth: {
+                        accountId: BB_KEY_ID, // NOTE: This is the accountId unique to the key
+                        applicationKey: BB_APP_KEY
+                    }
+                });
+                b2.authorize(function (err) {
+                    if (err) {throw err;}
+                    b2.uploadFile(singleImg.path, {
+                        bucketId: BB_BUCKET_ID,
+                        fileName: timeNow + '-' + singleImg.originalFilename, // this is the object storage "key". Can include a full path
+                    }, function (err, result) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            bb_images_ids.push(result.fileId);
+                        }
+                    });
+                });
+                //imageNames.push('http://' + hostname + '/uploads/images/' + timeNow + '-' + imgArray[j].originalFilename);
+                imageNames.push('https://f002.backblazeb2.com/file/nodejs/' + timeNow + '-' + imgArray[j].originalFilename);
             }
         }
+
+
         if (imageNames.length !== 0){
             image_json = '"Image":' + json_encode(imageNames) ;
         } else {
@@ -71,6 +98,8 @@ router.post('/add',function (req, res) {
         let filesArray = files.docUrl;
         let documentsArray = {};
         let docs_json = '';
+        let bb_docs_ids = [];
+
         for (let k = 0; k < filesArray.length; k++) {
             let uploadFileOk = 1;
             let hostname = req.headers.host;
@@ -82,11 +111,32 @@ router.post('/add',function (req, res) {
             }
             if (uploadFileOk !== 0){
                 let timeNow = Date.now();
-                newPath+= timeNow + '-' + singleFile.originalFilename;
-                readAndWriteFile(singleFile, newPath);
+                //newPath+= timeNow + '-' + singleFile.originalFilename;
+                //readAndWriteFile(singleFile, newPath);
+                const b3 = new b2CloudStorage({
+                    auth: {
+                        accountId: BB_KEY_ID, // NOTE: This is the accountId unique to the key
+                        applicationKey: BB_APP_KEY
+                    }
+                });
+                b3.authorize(function(err){
+                    if(err){ throw err; }
+                    b3.uploadFile(singleFile.path, {
+                        bucketId: BB_BUCKET_ID,
+                        fileName: timeNow + '-' + singleFile.originalFilename, // this is the object storage "key". Can include a full path
+                    }, function(err, result){
+                        if (err) {
+                            console.log(err);
+                        }else {
+                            bb_docs_ids.push(result.fileId);
+                        }
+                    });
+                });
+
                 documentsArray[doc_types[k]]=[{
                     'Name':doc_names[k],
-                    'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
+                    //'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
+                    'Url':'https://f002.backblazeb2.com/file/nodejs/' + timeNow + '-' + filesArray[k].originalFilename,
                 }];
             }
         }
@@ -123,6 +173,7 @@ router.post('/add',function (req, res) {
             //res.redirect('/dashboard');
             res.render('dashboard/add_product', {
                 title: 'افزودن محصول',
+                page_name : 'addProduct',
                 validation_errors: errors,
                 old_values: oldValues
             });
@@ -131,42 +182,47 @@ router.post('/add',function (req, res) {
                 req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
                 res.render('dashboard/add_product', {title: 'افزودن محصول',validation_errors: errors});
             } else {
-                const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
-                const sij_json = '{' + image_json + ','  + docs_json + '}';
-                const query = {
-                    text: 'insert into '+ PRODUCT_TABLE_NAME +'(pkey,dkpartnumber,partnumber, description, detaileddescription,sij,dkj,user_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8)',
-                    values: [0,partnumber[0],partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,req.user.id ],
-                };
-                client.query(query, (err, response) => {
-                    if (err) {
-                        console.log(err.stack);
-                        req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
-                        res.redirect('/dashboard/add_product');
-                    } else {
-                        // Add to elastic search
-                        esclient.index({
-                            index: ES_INDEX,
-                            type: ES_TYPE,
-                            body: {
-                                "partnumber" : partnumber[0],
-                                "description" : description[0],
-                                "detaileddescription" : detaileddescription[0],
-                                "sij" : sij_json,
-                                "dkj" : dkj_json
+                let check_ids = setInterval(function () {
+                    if (bb_images_ids.length === imgArray.length && bb_docs_ids.length === filesArray.length ){
+                        const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
+                        const sij_json = '{' + image_json + ','  + docs_json + '}';
+                        const query = {
+                            text: 'insert into '+ PRODUCT_TABLE_NAME +'(pkey,dkpartnumber,partnumber, description, detaileddescription,sij,dkj,user_id,bbimagesids,bbdocsids) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
+                            values: [0,partnumber[0],partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,req.user.id,json_encode(bb_images_ids),json_encode(bb_docs_ids) ],
+                        };
+                        client.query(query, (err, response) => {
+                            if (err) {
+                                console.log(err.stack);
+                                req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
+                                res.redirect('/dashboard/add_product');
+                            } else {
+                                // Add to elastic search
+                                esclient.index({
+                                    index: ES_INDEX,
+                                    type: ES_TYPE,
+                                    body: {
+                                        "partnumber" : partnumber[0],
+                                        "description" : description[0],
+                                        "detaileddescription" : detaileddescription[0],
+                                        "sij" : sij_json,
+                                        "dkj" : dkj_json
+                                    }
+                                });
+                                //console.log(response.rows[0]);
+                                req.session.sessionFlash = {type: 'addSuccessMsg', message: 'محصول اضافه شد.'};
+                                res.redirect('/dashboard/add_product');
                             }
                         });
-                        //console.log(response.rows[0]);
-                        req.session.sessionFlash = {type: 'addSuccessMsg', message: 'محصول اضافه شد.'};
-                        res.redirect('/dashboard/add_product');
+                        clearInterval(check_ids);
                     }
-                });
+                },3000);
             }
         }
     });
 
 
     function objectSize(obj) {
-        var size = 0, key;
+        let size = 0, key;
         for (key in obj) {
             if (obj.hasOwnProperty(key)) size++;
         }
@@ -271,9 +327,28 @@ router.post('/update',function (req, res) {
                 if (uploadImageOk !== 0){
                     let hostname = req.headers.host;
                     let timeNow = Date.now();
-                    newPath+=  timeNow + '-' + singleImg.originalFilename;
-                    readAndWriteImage(singleImg, newPath);
-                    imageNames.push('http://' + hostname + '/uploads/images/' + timeNow + '-' + imgArray[j].originalFilename);
+                    //newPath+=  timeNow + '-' + singleImg.originalFilename;
+                    //readAndWriteImage(singleImg, newPath);
+                    const b2 = new b2CloudStorage({
+                        auth: {
+                            accountId: BB_KEY_ID, // NOTE: This is the accountId unique to the key
+                            applicationKey: BB_APP_KEY
+                        }
+                    });
+                    b2.authorize(function(err){
+                        if(err){ throw err; }
+                        b2.uploadFile(singleImg.path, {
+                            bucketId: BB_BUCKET_ID,
+                            fileName: timeNow + '-' + singleImg.originalFilename, // this is the object storage "key". Can include a full path
+                        }, function(err){
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                    });
+
+                    imageNames.push('https://f002.backblazeb2.com/file/nodejs/' + timeNow + '-' + imgArray[j].originalFilename);
+                    //imageNames.push('http://' + hostname + '/uploads/images/' + timeNow + '-' + imgArray[j].originalFilename);
                 }
             }
         }
@@ -324,11 +399,30 @@ router.post('/update',function (req, res) {
                 }
                 if (uploadFileOk !== 0){
                     let timeNow = Date.now();
-                    newPath+= timeNow + '-' + singleFile.originalFilename;
-                    readAndWriteFile(singleFile, newPath);
+                    //newPath+= timeNow + '-' + singleFile.originalFilename;
+                    //readAndWriteFile(singleFile, newPath);
+                    const b2 = new b2CloudStorage({
+                        auth: {
+                            accountId: BB_KEY_ID, // NOTE: This is the accountId unique to the key
+                            applicationKey: BB_APP_KEY
+                        }
+                    });
+                    b2.authorize(function(err){
+                        if(err){ throw err; }
+                        b2.uploadFile(singleFile.path, {
+                            bucketId: BB_BUCKET_ID,
+                            fileName: timeNow + '-' + singleFile.originalFilename, // this is the object storage "key". Can include a full path
+                            //contentType: 'image/png',
+                        }, function(err){
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                    });
                     docs_array[doc_types[k]]=[{
                         'Name':doc_names[k],
-                        'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
+                        'Url':'https://f002.backblazeb2.com/file/nodejs/' + timeNow + '-' + filesArray[k].originalFilename,
+                        //'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
                     }];
 
                 }
@@ -349,8 +443,8 @@ router.post('/update',function (req, res) {
             if (attr_names[i] === ''){counter++;}
             attr_array[attr_names[i]] = attr_values[i];
         }
-            attr_json = '"Attributes":' + json_encode(attr_array) ;
-            attr_json = attr_json.replace(/\[/g, "").replace(/\]/g, "");
+        attr_json = '"Attributes":' + json_encode(attr_array) ;
+        attr_json = attr_json.replace(/\[/g, "").replace(/\]/g, "");
 
 
         if (! isEmpty(errors)){
@@ -375,13 +469,14 @@ router.post('/update',function (req, res) {
                         res.redirect('/dashboard/products');
                     } else {
                         let appDir = path.dirname(require.main.filename);
-                        for (let ii=0 ; ii<images_src.length ; ii++){
-                            fs.unlink( appDir +'\\public\\uploads\\images\\' + images_src[ii], (err) => {
-                                if (err) {
-                                    console.error(err);
-                                }
-                            });
-                        }
+
+                        //for (let ii=0 ; ii<images_src.length ; ii++){
+                            // fs.unlink( appDir +'\\public\\uploads\\images\\' + images_src[ii], (err) => {
+                            //     if (err) {
+                            //         console.error(err);
+                            //     }
+                            // });
+                        //}
                         for (let jj=0 ; jj<docs_src.length ; jj++){
                             fs.unlink( appDir +'\\public\\uploads\\documents\\' + docs_src[jj], (err) => {
                                 if (err) {

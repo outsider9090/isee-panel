@@ -86,26 +86,6 @@ jQuery(document).ready(function ($) {
             $('#signup_form').find('#btn_signup').attr('disabled' , 'disabled');
         }
 
-        // let number = /([0-9])/;
-        // let alphabets = /([a-zA-Z])/;
-        // let special_characters = /([~,!,@,#,$,%,^,&,*,-,_,+,=,?,>,<])/;
-        // const pass_str_div = $('#signup_form').find('#password-strength-status');
-        // if($(this).val().length<6) {
-        //     pass_str_div.removeClass();
-        //     pass_str_div.addClass('weak-password');
-        //     pass_str_div.html("کلمه عبور ضعیف. (حداقل باید 6 کاراکتر باشد)");
-        // } else {
-        //     if($(this).val().match(number) && $(this).val().match(alphabets) && $(this).val().match(special_characters)) {
-        //         pass_str_div.removeClass();
-        //         pass_str_div.addClass('strong-password');
-        //         pass_str_div.html("کلمه عبور قوی");
-        //     } else {
-        //         pass_str_div.removeClass();
-        //         pass_str_div.addClass('medium-password');
-        //         pass_str_div.html("Medium (should include alphabets, numbers and special characters.)");
-        //         pass_str_div.html("کلمه عبور متوسط. (باید شامل حروف، اعداد و کاراکترهای ویژه باشد)");
-        //     }
-        // }
     });
     $('#signup_form').find('#your_password_repeat').on('input',function () {
         let pass_repeat = $(this).val();
@@ -134,7 +114,6 @@ jQuery(document).ready(function ($) {
     }
 
 
-
     $('#add_spec_input').click(function (e) {
         e.preventDefault();
         $('.addAttrib').append('<div class="col-12 my-2"><div class="form-row"><div class="col-md-6 col-sm-12 mb-4"><label for="Attribute_name">عنوان ویژگی</label><input type="text" class="form-control" id="Attribute_name" name="attribNames" required></div><div class="col-md-6 col-sm-12 mb-4"><label for="Attribute_value">مقدار ویژگی</label><input type="text" class="form-control" id="Attribute_value" name="attribValues" required></div></div></div>');
@@ -142,12 +121,12 @@ jQuery(document).ready(function ($) {
 
     $('#add_doc_input').click(function (e) {
         e.preventDefault();
-        $('.addDocument').append('<div class="col-12 my-2"><div class="form-row"><div class="col-md-6 col-sm-12 mb-4"><label for="Doc_type">نوع سند </label><input type="text" class="form-control docType" id="Doc_type" name="docType" required></div><div class="col-md-6 col-sm-12 mb-4"><label for="Doc_name">نام سند </label><input type="text" class="form-control" id="Doc_name" name="docName" required></div><div class="form-row file-field col-12"><div class="file-path-wrapper"><input class="file-path validate" type="text" placeholder="آپلود فایل"></div><a class="btn-floating btn-md purple-gradient mt-0 float-left"><i class="material-icons">cloud_upload</i><input type="file" id="Doc_url" name="docUrl" accept="application/pdf"></a></div></div></div>');
+        $('.addDocument').append('<div class="col-12 my-2"><div class="form-row"><div class="col-md-6 col-sm-12 mb-4"><label for="Doc_type">نوع سند </label><input type="text" class="form-control docType" id="Doc_type" name="docType" required></div><div class="col-md-6 col-sm-12 mb-4"><label for="Doc_name">نام سند </label><input type="text" class="form-control" id="Doc_name" name="docName" required></div><div class="file-field col-12"><div class="btn btn-md purple-gradient btn-sm float-left"><span><i class="material-icons">attach_file</i></span><input type="file" id="Doc_url" name="docUrl" accept="application/pdf"></div><div class="file-path-wrapper"><input class="file-path validate" type="text" placeholder="آپلود فایل" ></div></div></div></div>');
     });
 
     $('#add_image_input').click(function (e) {
         e.preventDefault();
-        $('.addImage').append('<div class="col-12 my-2"><div class="form-row file-field"><div class="file-path-wrapper"><input class="file-path validate" type="text" placeholder="آپلود تصویر"></div><a class="btn-floating btn-md purple-gradient mt-0 float-left"><i class="material-icons">cloud_upload</i><input type="file" id="Image" name="part_image" accept="image/*"></a></div></div>');
+        $('.addImage').append('<div class="col-12 my-2"> <div class="file-field col-12"><div class="btn purple-gradient btn-sm float-left"><span><i class="material-icons">image</i></span><input type="file" name="part_image" accept="image/*"></div><div class="file-path-wrapper"><input class="file-path validate" type="text" placeholder="آپلود تصویر"></div></div></div>');
     });
 
 
@@ -223,11 +202,14 @@ jQuery(document).ready(function ($) {
         let thisElement = $(this);
         if (confirm('از حذف این آیتم اطمینان دارید؟')){
             let img_src = $(this).data('src');
+            let img_id = $(this).data('srcid');
+            //console.log('rtertre: ' + img_id);
+
             let res = img_src.split("/");
             $.ajax({
                 url: '/remove_image',
                 type: 'POST',
-                data: { 'img_name':res[5] },
+                data: {'img_name':res[5],'img_id':img_id},
                 dataType: 'JSON',
                 success: function (data) {
                     if (data['msg'] === 1){

@@ -63,7 +63,7 @@
                                     <h5 class="form_title text-center">ارسال محصول جدید</h5>
                                 </fieldset>
                                 <div class="form-row">
-                                    <div class="col-12 mb-4 required">
+                                    <div class="col-md-6 col-sm-12 mb-4 required">
                                         <label for="partnumber">شماره قطعه</label>
                                         <input type="text" class="form-control" id="partnumber" name="partnumber" required
                                         value="<%= old_values.partnumber %>">
@@ -73,9 +73,7 @@
                                             </div>
                                         <% } %>
                                     </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-12 mb-4 required">
+                                    <div class="col-md-6 col-sm-12 mb-4 required">
                                         <label for="description">توضیحات قطعه</label>
                                         <input type="text" class="form-control" id="description" name="description" required value="<%= old_values.description %>">
                                         <% if (validation_errors.length != 0 && validation_errors.description != null){ %>
@@ -85,6 +83,7 @@
                                         <% } %>
                                     </div>
                                 </div>
+
                                 <div class="form-row">
                                     <div class="col-12 mb-4">
                                         <label for="detaileddescription">توصیف همراه با جزئیات</label>
@@ -101,14 +100,14 @@
                                 </div>
                                 <div class="addImage">
                                     <div class="col-12 my-2">
-                                        <div class="form-row file-field ">
+                                        <div class="file-field col-12">
+                                            <div class="btn purple-gradient btn-sm float-left">
+                                                <span><i class="material-icons">image</i></span>
+                                                <input type="file" name="part_image" accept="image/*">
+                                            </div>
                                             <div class="file-path-wrapper">
                                                 <input class="file-path validate" type="text" placeholder="آپلود تصویر">
                                             </div>
-                                            <a class="btn-floating btn-md purple-gradient mt-0 float-left">
-                                                <i class="material-icons">cloud_upload</i>
-                                                <input type="file" id="Image" name="part_image" accept="image/*">
-                                            </a>
                                         </div>
                                     </div>
                                     <% if (validation_errors.length != 0 && validation_errors.part_image != null){ %>
@@ -117,7 +116,6 @@
                                         </div>
                                     <% } %>
                                 </div>
-
 
                                 <div class="add_document_fieldset">
                                     <a class="btn-floating btn-sm deep-purple" id="add_doc_input" data-toggle="tooltip"
@@ -137,14 +135,14 @@
                                                 <label for="Doc_name">نام سند </label>
                                                 <input type="text" class="form-control" id="Doc_name" name="docName" required>
                                             </div>
-                                            <div class="form-row file-field col-12">
-                                                <div class="file-path-wrapper">
-                                                    <input class="file-path validate" type="text" placeholder="آپلود فایل">
-                                                </div>
-                                                <a class="btn-floating btn-md purple-gradient mt-0 float-left">
-                                                    <i class="material-icons">cloud_upload</i>
+                                            <div class="file-field col-12">
+                                                <div class="btn btn-md purple-gradient btn-sm float-left">
+                                                    <span><i class="material-icons">attach_file</i></span>
                                                     <input type="file" id="Doc_url" name="docUrl" accept="application/pdf">
-                                                </a>
+                                                </div>
+                                                <div class="file-path-wrapper">
+                                                    <input class="file-path validate" type="text" placeholder="آپلود فایل" >
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
