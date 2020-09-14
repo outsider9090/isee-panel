@@ -93,8 +93,9 @@
                                 </div>
                                 <div class="addImage">
                                     <div class="col-12 my-2">
+                                        <% let counter=0; %>
                                         <% images.forEach( img => { %>
-                                        <% //let split_name = img.split("/"); %>
+                                            <% //let split_name = img.split("/"); %>
                                             <div class="file-field col-12">
                                                 <div class="btn purple-gradient btn-sm float-left">
                                                     <span><i class="material-icons">image</i></span>
@@ -105,13 +106,13 @@
                                                            value="<%= img %>">
                                                 </div>
                                                 <a class="btn-floating btn-sm deep-orange removeImage"
-                                                   data-src="<%= img %>" data-srcid="<%= product.bbimagesids %>">
+                                                   data-src="<%= img %>" data-srcid="<%= img_ids[counter] %>">
                                                     <i class="material-icons align-middle">remove</i>
                                                 </a>
+                                                <input type="hidden" value="<%= img_ids[counter] %>" name="old_image_ids">
                                             </div>
+                                            <% counter++; %>
                                         <% }) %>
-
-
                                     </div>
                                 </div>
 
@@ -124,6 +125,7 @@
                                 </div>
                                 <div class="addDocument">
                                     <div class="col-12 my-2">
+                                        <% let counter2=0; %>
                                         <% docs.forEach( doc => { %>
                                             <% //let split_src = doc[1]['Url'].split("/"); %>
                                             <div class="form-row">
@@ -136,13 +138,13 @@
                                                     <input type="text" class="form-control" id="Doc_name" name="oldDocName" required value="<%= doc[1]['Name'] %>" >
                                                 </div>
                                                 <!--<div class="form-row file-field col-12">-->
-                                                    <!--<div class="file-path-wrapper">-->
-                                                        <!--<input class="file-path validate" type="text" placeholder="آپلود فایل" value="<%= doc[1]['Url'] %>" name="oldDocUrl">-->
-                                                    <!--</div>-->
-                                                    <!--<a class="btn-floating btn-md purple-gradient mt-0 float-left">-->
-                                                        <!--<i class="material-icons">cloud_upload</i>-->
-                                                        <!--<input type="file" id="Doc_url" accept="application/pdf">-->
-                                                    <!--</a>-->
+                                                <!--<div class="file-path-wrapper">-->
+                                                <!--<input class="file-path validate" type="text" placeholder="آپلود فایل" value="<%= doc[1]['Url'] %>" name="oldDocUrl">-->
+                                                <!--</div>-->
+                                                <!--<a class="btn-floating btn-md purple-gradient mt-0 float-left">-->
+                                                <!--<i class="material-icons">cloud_upload</i>-->
+                                                <!--<input type="file" id="Doc_url" accept="application/pdf">-->
+                                                <!--</a>-->
                                                 <!--</div>-->
                                                 <div class="file-field col-12">
                                                     <div class="btn btn-md purple-gradient btn-sm float-left">
@@ -154,10 +156,12 @@
                                                     </div>
                                                 </div>
                                                 <a class="btn-floating btn-sm deep-orange removeDoc"
-                                                   data-src="<%= doc[1]['Url'] %>">
+                                                   data-src="<%= doc[1]['Url'] %>" data-srcid="<%= doc_ids[counter2] %>">
                                                     <i class="material-icons align-middle">remove</i>
                                                 </a>
+                                                <input type="hidden" value="<%= doc_ids[counter2] %>" name="old_doc_ids">
                                             </div>
+                                        <% counter2++; %>
                                         <% }) %>
                                     </div>
                                 </div>
@@ -188,7 +192,7 @@
                                 <input type="hidden" name="product_id" value="<%= product.id %>">
 
                                 <div class="row my-4">
-                                    <button type="submit" class="btn blue-gradient btn-block waves-effect" name="btn_edit_product" id="edit_product_frm_submit">
+                                    <button type="submit" class="btn blue-gradient btn-block waves-effect submit" name="btn_edit_product" id="edit_product_frm_submit">
                                         ویرایش <i class="material-icons align-middle">refresh</i>
                                     </button>
                                 </div>

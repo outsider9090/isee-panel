@@ -59,8 +59,6 @@ router.get('/products', function(req, res, next) {
                 currentPage : req.query.page,
                 pages: paginate.getArrayPages(req)('', pageCount, req.query.page)
             });
-
-           // res.send(req.query);
         }
     });
 

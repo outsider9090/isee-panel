@@ -130,8 +130,9 @@ jQuery(document).ready(function ($) {
     });
 
 
-    $('button[type=submit]').click(function () {
-        $(this).find('i').addClass('spin').css('display', 'inline-block');
+    $('button.submit').click(function () {
+        $(this).text('در حال ارسال...');
+        //$(this).find('i').addClass('spin').css('display', 'inline-block');
     });
 
     $('#loginTabClick').on('click' , function (e) {
@@ -203,13 +204,12 @@ jQuery(document).ready(function ($) {
         if (confirm('از حذف این آیتم اطمینان دارید؟')){
             let img_src = $(this).data('src');
             let img_id = $(this).data('srcid');
-            //console.log('rtertre: ' + img_id);
 
             let res = img_src.split("/");
             $.ajax({
                 url: '/remove_image',
                 type: 'POST',
-                data: {'img_name':res[5],'img_id':img_id},
+                data: {'img_name':res[5], 'img_id':img_id},
                 dataType: 'JSON',
                 success: function (data) {
                     if (data['msg'] === 1){
@@ -228,11 +228,13 @@ jQuery(document).ready(function ($) {
         let thisElement = $(this);
         if (confirm('از حذف این آیتم اطمینان دارید؟')){
             let doc_src = $(this).data('src');
+            let file_id = $(this).data('srcid');
+
             let res = doc_src.split("/");
             $.ajax({
                 url: '/remove_document',
                 type: 'POST',
-                data: { 'doc_name':res[5] },
+                data: { 'doc_name':res[5] , 'file_id': file_id },
                 dataType: 'JSON',
                 success: function (data) {
                     if (data['msg'] === 1){

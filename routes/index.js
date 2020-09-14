@@ -6,7 +6,6 @@ let esclient = require('../config/db/elasticssearch');
 let fs = require('fs');
 let path = require('path');
 const b2CloudStorage = require('b2-cloud-storage');
-const SolidBucket = require('solid-bucket')
 
 
 
@@ -25,28 +24,29 @@ router.get('/403', function(req, res, next) {
 global.images_src = [];
 global.images_ids = [];
 global.docs_src = [];
+global.docs_ids = [];
 
 
 router.post('/remove_image' , function (req, res) {
-  //let image_name = req.body.img_name;
+  let image_name = req.body.img_name;
   let img_id = req.body.img_id;
 
-  console.log('sadadadartertret: ' + img_id);
-  //res.json({msg:img_id});
-
-  // let result1 = images_src.push(image_name);
-  // let result2 = images_ids.push(image_id);
-  // if (result1 && result2){
-  //   res.json({msg:1});
-  // } else {
-  //   res.json({msg:0});
-  // }
+  let result1 = images_src.push(image_name);
+  let result2 = images_ids.push(img_id);
+  if (result1 && result2){
+    res.json({msg:1});
+  } else {
+    res.json({msg:0});
+  }
 });
 
 router.post('/remove_document' , function (req, res) {
   let doc_name = req.body.doc_name;
-  let result = docs_src.push(doc_name);
-  if (result){
+  let doc_id = req.body.file_id;
+
+  let result1 = docs_src.push(doc_name);
+  let result2 = docs_ids.push(doc_id);
+  if (result1 && result2){
     res.json({msg:1});
   } else {
     res.json({msg:0});
@@ -61,7 +61,7 @@ router.post('/delete_product' , function (req, res) {
   let imgs_ids = [];
   let docs_ids = [];
   let docs = [];
-  let appDir = path.dirname(require.main.filename);
+  //let appDir = path.dirname(require.main.filename);
 
 
   const query0 = {
@@ -80,7 +80,6 @@ router.post('/delete_product' , function (req, res) {
       docs_ids = JSON.parse(response.rows[0].bbdocsids);
     }
   });
-
 
   const query = {
     text: 'DELETE FROM '+ PRODUCT_TABLE_NAME +' WHERE id=$1',

@@ -258,6 +258,9 @@ router.post('/add',function (req, res) {
 
 router.get('/edit/:product_id' , function (req,res) {
     images_src = [];
+    images_ids = [];
+    docs_src = [];
+    docs_ids = [];
     const query = {
         text: 'SELECT * FROM '+ PRODUCT_TABLE_NAME +' WHERE id=$1',
         values: [req.params.product_id],
@@ -271,6 +274,7 @@ router.get('/edit/:product_id' , function (req,res) {
             let attrs = Object.entries(json_parse['Attributes']);
             let docs = Object.entries(json_parse['Documents']);
 
+
             res.render('dashboard/edit_product' , {
                 title: 'ویرایش محصول',
                 page_name: 'addProduct',
@@ -278,7 +282,9 @@ router.get('/edit/:product_id' , function (req,res) {
                 product : response.rows[0],
                 images : json_parse['Image'],
                 docs : docs,
-                attrs : attrs
+                attrs : attrs,
+                img_ids: JSON.parse(response.rows[0].bbimagesids),
+                doc_ids: JSON.parse(response.rows[0].bbdocsids),
             });
         }
     });
@@ -303,18 +309,28 @@ router.post('/update',function (req, res) {
             errors.description = 'لطفا توضیحات قطعه را وارد کنید!';
         }
 
+
         // Old images
         let old_images = fields.old_part_image;
+        let old_image_ids = fields.old_image_ids;
         let names = [];
+        let old_image_ids_array = [];
         if (old_images !== undefined){
             for (let i = 0; i < old_images.length ; i++) {
                 names.push(old_images[i]);
+            }
+        }
+        if (old_image_ids !== undefined){
+            for (let j = 0; j < old_image_ids.length ; j++) {
+                old_image_ids_array.push(old_image_ids[j]);
             }
         }
         // New Images
         let imgArray = files.part_image;
         let imageNames = [];
         let image_json = '';
+        let bb_images_ids = [];
+
         if (imgArray !== undefined){
             for (let j = 0; j < imgArray.length; j++) {
                 let uploadImageOk = 1;
@@ -335,14 +351,16 @@ router.post('/update',function (req, res) {
                             applicationKey: BB_APP_KEY
                         }
                     });
-                    b2.authorize(function(err){
-                        if(err){ throw err; }
+                    b2.authorize(function (err) {
+                        if (err) {throw err;}
                         b2.uploadFile(singleImg.path, {
                             bucketId: BB_BUCKET_ID,
                             fileName: timeNow + '-' + singleImg.originalFilename, // this is the object storage "key". Can include a full path
-                        }, function(err){
+                        }, function (err, result) {
                             if (err) {
                                 console.log(err);
+                            } else {
+                                bb_images_ids.push(result.fileId);
                             }
                         });
                     });
@@ -362,11 +380,11 @@ router.post('/update',function (req, res) {
         }else if(names.length !== 0 && imageNames.length === 0) {
             image_json = '"Image":[' + json_encode(names) + ']';
             image_json = image_json.replace(/\\/g, "");
-        }
-        else {
+        }else {
             image_json = '' ;
             errors.part_image = 'حداقل یک تصویر انتخاب کنید!';
         }
+
 
 
         // Old Documents
@@ -374,12 +392,21 @@ router.post('/update',function (req, res) {
         let old_doc_name = fields.oldDocName;
         let old_doc_url = fields.oldDocUrl;
         let docs_array = {};
+        let docs = [];
+        let old_doc_ids = fields.old_doc_ids;
+        let old_doc_ids_array = [];
         if (old_doc_url !== undefined){
             for (let i = 0; i < old_doc_url.length ; i++) {
                 docs_array[old_doc_type[i]]=[{
                     'Name':old_doc_name[i],
                     'Url': old_doc_url[i]
                 }];
+                docs.push(old_doc_name[i]);
+            }
+        }
+        if (old_doc_ids !== undefined){
+            for (let j = 0; j < old_doc_ids.length ; j++) {
+                old_doc_ids_array.push(old_doc_ids[j]);
             }
         }
         // New Documents
@@ -387,6 +414,7 @@ router.post('/update',function (req, res) {
         let doc_names = fields.docName;
         let filesArray = files.docUrl;
         let docs_json = '';
+        let bb_docs_ids = [];
         if (filesArray !== undefined){
             for (let k = 0; k < filesArray.length; k++) {
                 let uploadFileOk = 1;
@@ -401,24 +429,26 @@ router.post('/update',function (req, res) {
                     let timeNow = Date.now();
                     //newPath+= timeNow + '-' + singleFile.originalFilename;
                     //readAndWriteFile(singleFile, newPath);
-                    const b2 = new b2CloudStorage({
+                    const b3 = new b2CloudStorage({
                         auth: {
                             accountId: BB_KEY_ID, // NOTE: This is the accountId unique to the key
                             applicationKey: BB_APP_KEY
                         }
                     });
-                    b2.authorize(function(err){
+                    b3.authorize(function(err){
                         if(err){ throw err; }
-                        b2.uploadFile(singleFile.path, {
+                        b3.uploadFile(singleFile.path, {
                             bucketId: BB_BUCKET_ID,
                             fileName: timeNow + '-' + singleFile.originalFilename, // this is the object storage "key". Can include a full path
-                            //contentType: 'image/png',
-                        }, function(err){
+                        }, function(err, result){
                             if (err) {
                                 console.log(err);
+                            }else {
+                                bb_docs_ids.push(result.fileId);
                             }
                         });
                     });
+
                     docs_array[doc_types[k]]=[{
                         'Name':doc_names[k],
                         'Url':'https://f002.backblazeb2.com/file/nodejs/' + timeNow + '-' + filesArray[k].originalFilename,
@@ -452,76 +482,126 @@ router.post('/update',function (req, res) {
             res.redirect('/dashboard/products');
         }else {
             if (image_json === '' && docs_json === '' && attr_json === ''){
-                console.log('are empty');
                 req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در افزودن محصول!'};
                 res.render('dashboard/add_product', {title: 'افزودن محصول',validation_errors: errors});
             } else {
-                const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
-                const sij_json = '{' + image_json + ','  + docs_json + '}';
-                const query = {
-                    text: 'UPDATE '+ PRODUCT_TABLE_NAME +' SET partnumber=$1,description=$2,detaileddescription=$3,sij=$4,dkj=$5  WHERE id=$6 ',
-                    values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,product_id[0]],
-                };
-                client.query(query, (err, response) => {
-                    if (err) {
-                        //console.log(err.stack);
-                        req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در ویرایش محصول!'};
-                        res.redirect('/dashboard/products');
-                    } else {
-                        let appDir = path.dirname(require.main.filename);
+                let check_ids = setInterval(function () {
+                    if ((bb_images_ids.length +names.length)===imgArray.length && (bb_docs_ids.length +docs.length)===filesArray.length  ){
+                        const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
+                        const sij_json = '{' + image_json + ','  + docs_json + '}';
+                        const query = {
+                            text: 'UPDATE '+ PRODUCT_TABLE_NAME +' SET partnumber=$1,description=$2,detaileddescription=$3,sij=$4,dkj=$5,bbimagesids=$6,bbdocsids=$7  WHERE id=$8 ',
+                            values: [partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json,json_encode(old_image_ids_array.concat(bb_images_ids)),json_encode(old_doc_ids_array.concat(bb_docs_ids)) ,product_id[0]],
+                        };
+                        client.query(query, (err, response) => {
+                            if (err) {
+                                //console.log(err.stack);
+                                req.session.sessionFlash = {type: 'addErrorMsg', message: 'خطا در ویرایش محصول!'};
+                                res.redirect('/dashboard/products');
+                            } else {
+                                //let appDir = path.dirname(require.main.filename);
+                                const b2 = new b2CloudStorage({
+                                    auth: {
+                                        accountId: BB_KEY_ID,
+                                        applicationKey: BB_APP_KEY
+                                    }
+                                });
 
-                        //for (let ii=0 ; ii<images_src.length ; ii++){
-                            // fs.unlink( appDir +'\\public\\uploads\\images\\' + images_src[ii], (err) => {
-                            //     if (err) {
-                            //         console.error(err);
-                            //     }
-                            // });
-                        //}
-                        for (let jj=0 ; jj<docs_src.length ; jj++){
-                            fs.unlink( appDir +'\\public\\uploads\\documents\\' + docs_src[jj], (err) => {
-                                if (err) {
-                                    console.error(err);
+
+                                let docs_ids_json = JSON.parse(json_encode(docs_ids));
+                                for (let ii=0 ; ii<docs_src.length ; ii++){
+                                    // console.log(docs_ids[ii]);
+                                    b2.authorize(function(err){
+                                        if(err){ throw err; }
+                                        b2.deleteFileVersion( {
+                                            fileName: docs_src[ii],
+                                            fileId : docs_ids_json[ii]
+                                        }, function(err ,result){
+                                            if (err) {
+                                                console.log(err);
+                                            }else {
+                                                console.log('success');
+                                            }
+                                        });
+                                    });
                                 }
-                            });
-                        }
-                        // Add to elastic search
-                        let product_id = 0;
-                        esclient.search({
-                            index: ES_INDEX,
-                            type: ES_TYPE,
-                            body:{
-                                "query": {
-                                    "match": {
-                                        "partnumber": oldpartnumber[0]
+
+                                let images_ids_json = JSON.parse(json_encode(images_ids));
+                                for (let jj=0 ; jj<images_src.length ; jj++){
+                                    console.log('dsasad: ' + images_ids_json[jj]);
+                                    b2.authorize(function(err){
+                                        if(err){ throw err; }
+                                        b2.deleteFileVersion( {
+                                            fileName: images_src[jj],
+                                            fileId : images_ids_json[jj]
+                                        }, function(err ,result){
+                                            if (err) {
+                                                console.log(err);
+                                            }else {
+                                                console.log('success');
+                                            }
+                                        });
+                                    });
+
+                                }
+
+
+                                //for (let ii=0 ; ii<images_src.length ; ii++){
+                                // fs.unlink( appDir +'\\public\\uploads\\images\\' + images_src[ii], (err) => {
+                                //     if (err) {
+                                //         console.error(err);
+                                //     }
+                                // });
+                                //}
+                                // for (let jj=0 ; jj<docs_src.length ; jj++){
+                                //     fs.unlink( appDir +'\\public\\uploads\\documents\\' + docs_src[jj], (err) => {
+                                //         if (err) {
+                                //             console.error(err);
+                                //         }
+                                //     });
+                                // }
+                                // Add to elastic search
+                                let product_id = 0;
+                                esclient.search({
+                                    index: ES_INDEX,
+                                    type: ES_TYPE,
+                                    body:{
+                                        "query": {
+                                            "match": {
+                                                "partnumber": oldpartnumber[0]
+                                            }
+                                        }
                                     }
-                                }
+                                }).then(function(resp) {
+                                    product_id =resp.hits.hits[0]._id;
+                                    esclient.update({
+                                        index: ES_INDEX,
+                                        type: ES_TYPE,
+                                        id: product_id,
+                                        body: {
+                                            doc:{
+                                                "partnumber" : partnumber[0],
+                                                "description" : description[0],
+                                                "detaileddescription" : detaileddescription[0],
+                                                "sij" : sij_json,
+                                                "dkj" : dkj_json
+                                            }
+                                        }
+                                    });
+                                }, function(err) {
+                                    console.trace(err.message);
+                                });
+                                req.session.sessionFlash = {type: 'editSuccessMsg', message: 'محصول ویرایش شد.'};
+                                res.redirect('/dashboard/products');
                             }
-                        }).then(function(resp) {
-                            product_id =resp.hits.hits[0]._id;
-                            esclient.update({
-                                index: ES_INDEX,
-                                type: ES_TYPE,
-                                id: product_id,
-                                body: {
-                                    doc:{
-                                        "partnumber" : partnumber[0],
-                                        "description" : description[0],
-                                        "detaileddescription" : detaileddescription[0],
-                                        "sij" : sij_json,
-                                        "dkj" : dkj_json
-                                    }
-                                }
-                            });
-                        }, function(err) {
-                            console.trace(err.message);
                         });
-                        req.session.sessionFlash = {type: 'editSuccessMsg', message: 'محصول ویرایش شد.'};
-                        res.redirect('/dashboard/products');
+                        clearInterval(check_ids);
                     }
-                });
+                },3000);
             }
         }
     });
+
 
 
     function readAndWriteImage(singleImg, newPath) {
