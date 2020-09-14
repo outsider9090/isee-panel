@@ -8,6 +8,7 @@ const signupError = document.getElementById("register_error").value;
 const SignupSuccess = document.getElementById("register_success").value;
 const logoutSuccess = document.getElementById("logout_success").value;
 const deleteSuccessMsg = document.getElementById("delete_success_msg").value;
+const splitIndex = document.getElementById("split_index").value;
 
 
 jQuery(document).ready(function ($) {
@@ -209,7 +210,7 @@ jQuery(document).ready(function ($) {
             $.ajax({
                 url: '/remove_image',
                 type: 'POST',
-                data: {'img_name':res[5], 'img_id':img_id},
+                data: {'img_name':res[splitIndex], 'img_id':img_id},
                 dataType: 'JSON',
                 success: function (data) {
                     if (data['msg'] === 1){
@@ -234,7 +235,7 @@ jQuery(document).ready(function ($) {
             $.ajax({
                 url: '/remove_document',
                 type: 'POST',
-                data: { 'doc_name':res[5] , 'file_id': file_id },
+                data: { 'doc_name':res[splitIndex] , 'file_id': file_id },
                 dataType: 'JSON',
                 success: function (data) {
                     if (data['msg'] === 1){

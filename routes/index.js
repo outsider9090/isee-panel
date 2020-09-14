@@ -100,12 +100,10 @@ router.post('/delete_product' , function (req, res) {
       imgs.forEach(img => {
         let img_split = img.split('/');
         imgs_ids.forEach(img_id =>{
-          console.log('idddd: '+ img_id);
           b2.authorize(function(err){
             if(err){ throw err; }
-            console.log('dfffds: ' + BB_SITE_UPLOAD_URL + img_split[5]);
             b2.deleteFileVersion( {
-              fileName: img_split[5],
+              fileName: BB_SITE_UPLOAD_URL_PREFIX + img_split[BB_SPLIT_INDEX],
               fileId : img_id
             }, function(err ,result){
               if (err) {
@@ -130,12 +128,12 @@ router.post('/delete_product' , function (req, res) {
       });
       docsArray.forEach(doc_src => {
         let src_split = doc_src.split('/');
+        console.log('name: ' + BB_SITE_UPLOAD_URL_PREFIX + src_split[BB_SPLIT_INDEX]);
         docs_ids.forEach(doc_id =>{
-          console.log('idddd: '+ doc_id);
           b2.authorize(function(err){
             if(err){ throw err; }
             b2.deleteFileVersion( {
-              fileName: src_split[5],
+              fileName: BB_SITE_UPLOAD_URL_PREFIX + src_split[BB_SPLIT_INDEX],
               fileId : doc_id
             }, function(err ,result){
               if (err) {

@@ -69,7 +69,7 @@ router.post('/add',function (req, res) {
                     if (err) {throw err;}
                     b2.uploadFile(singleImg.path, {
                         bucketId: BB_BUCKET_ID,
-                        fileName: timeNow + '-' + singleImg.originalFilename, // this is the object storage "key". Can include a full path
+                        fileName: BB_SITE_UPLOAD_URL_PREFIX + timeNow + '-' + singleImg.originalFilename, // this is the object storage "key". Can include a full path
                     }, function (err, result) {
                         if (err) {
                             console.log(err);
@@ -79,7 +79,7 @@ router.post('/add',function (req, res) {
                     });
                 });
                 //imageNames.push('http://' + hostname + '/uploads/images/' + timeNow + '-' + imgArray[j].originalFilename);
-                imageNames.push('https://f002.backblazeb2.com/file/nodejs/' + timeNow + '-' + imgArray[j].originalFilename);
+                imageNames.push(BB_FILE_URL + timeNow + '-' + imgArray[j].originalFilename);
             }
         }
 
@@ -123,7 +123,7 @@ router.post('/add',function (req, res) {
                     if(err){ throw err; }
                     b3.uploadFile(singleFile.path, {
                         bucketId: BB_BUCKET_ID,
-                        fileName: timeNow + '-' + singleFile.originalFilename, // this is the object storage "key". Can include a full path
+                        fileName: BB_SITE_UPLOAD_URL_PREFIX + timeNow + '-' + singleFile.originalFilename, // this is the object storage "key". Can include a full path
                     }, function(err, result){
                         if (err) {
                             console.log(err);
@@ -136,7 +136,7 @@ router.post('/add',function (req, res) {
                 documentsArray[doc_types[k]]=[{
                     'Name':doc_names[k],
                     //'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
-                    'Url':'https://f002.backblazeb2.com/file/nodejs/' + timeNow + '-' + filesArray[k].originalFilename,
+                    'Url':BB_FILE_URL + timeNow + '-' + filesArray[k].originalFilename,
                 }];
             }
         }
@@ -355,7 +355,7 @@ router.post('/update',function (req, res) {
                         if (err) {throw err;}
                         b2.uploadFile(singleImg.path, {
                             bucketId: BB_BUCKET_ID,
-                            fileName: timeNow + '-' + singleImg.originalFilename, // this is the object storage "key". Can include a full path
+                            fileName: BB_SITE_UPLOAD_URL_PREFIX + timeNow + '-' + singleImg.originalFilename, // this is the object storage "key". Can include a full path
                         }, function (err, result) {
                             if (err) {
                                 console.log(err);
@@ -365,7 +365,7 @@ router.post('/update',function (req, res) {
                         });
                     });
 
-                    imageNames.push('https://f002.backblazeb2.com/file/nodejs/' + timeNow + '-' + imgArray[j].originalFilename);
+                    imageNames.push(BB_FILE_URL + timeNow + '-' + imgArray[j].originalFilename);
                     //imageNames.push('http://' + hostname + '/uploads/images/' + timeNow + '-' + imgArray[j].originalFilename);
                 }
             }
@@ -384,7 +384,6 @@ router.post('/update',function (req, res) {
             image_json = '' ;
             errors.part_image = 'حداقل یک تصویر انتخاب کنید!';
         }
-
 
 
         // Old Documents
@@ -439,7 +438,7 @@ router.post('/update',function (req, res) {
                         if(err){ throw err; }
                         b3.uploadFile(singleFile.path, {
                             bucketId: BB_BUCKET_ID,
-                            fileName: timeNow + '-' + singleFile.originalFilename, // this is the object storage "key". Can include a full path
+                            fileName: BB_SITE_UPLOAD_URL_PREFIX + timeNow + '-' + singleFile.originalFilename, // this is the object storage "key". Can include a full path
                         }, function(err, result){
                             if (err) {
                                 console.log(err);
@@ -451,7 +450,7 @@ router.post('/update',function (req, res) {
 
                     docs_array[doc_types[k]]=[{
                         'Name':doc_names[k],
-                        'Url':'https://f002.backblazeb2.com/file/nodejs/' + timeNow + '-' + filesArray[k].originalFilename,
+                        'Url':BB_FILE_URL + timeNow + '-' + filesArray[k].originalFilename,
                         //'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
                     }];
 
@@ -510,41 +509,43 @@ router.post('/update',function (req, res) {
 
                                 let docs_ids_json = JSON.parse(json_encode(docs_ids));
                                 for (let ii=0 ; ii<docs_src.length ; ii++){
-                                    // console.log(docs_ids[ii]);
-                                    b2.authorize(function(err){
-                                        if(err){ throw err; }
-                                        b2.deleteFileVersion( {
-                                            fileName: docs_src[ii],
-                                            fileId : docs_ids_json[ii]
-                                        }, function(err ,result){
-                                            if (err) {
-                                                console.log(err);
-                                            }else {
-                                                console.log('success');
-                                            }
+                                    for (let kk=0 ; kk<docs_src.length ; kk++){
+                                        // console.log(docs_ids[ii]);
+                                        b2.authorize(function(err){
+                                            if(err){ throw err; }
+                                            b2.deleteFileVersion( {
+                                                fileName: BB_SITE_UPLOAD_URL_PREFIX + docs_src[ii],
+                                                fileId : docs_ids_json[ii]
+                                            }, function(err ,result){
+                                                if (err) {
+                                                    console.log(err);
+                                                }else {
+                                                    console.log('success');
+                                                }
+                                            });
                                         });
-                                    });
+                                    }
                                 }
 
                                 let images_ids_json = JSON.parse(json_encode(images_ids));
-                                for (let jj=0 ; jj<images_src.length ; jj++){
-                                    console.log('dsasad: ' + images_ids_json[jj]);
-                                    b2.authorize(function(err){
-                                        if(err){ throw err; }
-                                        b2.deleteFileVersion( {
-                                            fileName: images_src[jj],
-                                            fileId : images_ids_json[jj]
-                                        }, function(err ,result){
-                                            if (err) {
-                                                console.log(err);
-                                            }else {
-                                                console.log('success');
-                                            }
+                                for (let ii=0 ; ii<images_src.length ; ii++){
+                                    for (let jj=0 ; jj<images_src.length ; jj++){
+                                        console.log('dsasad: ' + images_ids_json[jj]);
+                                        b2.authorize(function(err){
+                                            if(err){ throw err; }
+                                            b2.deleteFileVersion( {
+                                                fileName: BB_SITE_UPLOAD_URL_PREFIX + images_src[jj],
+                                                fileId : images_ids_json[jj]
+                                            }, function(err ,result){
+                                                if (err) {
+                                                    console.log(err);
+                                                }else {
+                                                    console.log('success');
+                                                }
+                                            });
                                         });
-                                    });
-
+                                    }
                                 }
-
 
                                 //for (let ii=0 ; ii<images_src.length ; ii++){
                                 // fs.unlink( appDir +'\\public\\uploads\\images\\' + images_src[ii], (err) => {
