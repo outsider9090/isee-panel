@@ -122,12 +122,12 @@ jQuery(document).ready(function ($) {
 
     $('#add_doc_input').click(function (e) {
         e.preventDefault();
-        $('.addDocument').append('<div class="col-12 my-2"><div class="form-row"><div class="col-md-6 col-sm-12 mb-4"><label for="Doc_type">نوع سند </label><input type="text" class="form-control docType" id="Doc_type" name="docType" required></div><div class="col-md-6 col-sm-12 mb-4"><label for="Doc_name">نام سند </label><input type="text" class="form-control" id="Doc_name" name="docName" required></div><div class="file-field col-12"><div class="btn btn-md purple-gradient btn-sm float-left"><span><i class="material-icons">attach_file</i></span><input type="file" id="Doc_url" name="docUrl" accept="application/pdf"></div><div class="file-path-wrapper"><input class="file-path validate" type="text" placeholder="آپلود فایل" ></div></div></div></div>');
+        $('.addDocument').append('<div class="col-12 my-2"><div class="form-row"><div class="col-md-6 col-sm-12 mb-4"><label for="Doc_type">نوع سند </label><input type="text" class="form-control docType" id="Doc_type" name="docType" required></div><div class="col-md-6 col-sm-12 mb-4"><label for="Doc_name">نام سند </label><input type="text" class="form-control" id="Doc_name" name="docName" required></div><div class="file-field col-12"><div class="btn btn-md purple-gradient btn-sm float-left"><span><i class="material-icons">attach_file</i></span><input type="file" id="Doc_url" name="docUrl" accept="application/pdf"></div><div class="file-path-wrapper"><input class="file-path validate" type="text" placeholder="آپلود فایل" ></div></div></div><input type="hidden" name="all_docs"></div>');
     });
 
     $('#add_image_input').click(function (e) {
         e.preventDefault();
-        $('.addImage').append('<div class="col-12 my-2"> <div class="file-field col-12"><div class="btn purple-gradient btn-sm float-left"><span><i class="material-icons">image</i></span><input type="file" name="part_image" accept="image/*"></div><div class="file-path-wrapper"><input class="file-path validate" type="text" placeholder="آپلود تصویر"></div></div></div>');
+        $('.addImage').append('<div class="col-12 my-2"> <div class="file-field col-12"><div class="btn purple-gradient btn-sm float-left"><span><i class="material-icons">image</i></span><input type="file" name="part_image" accept="image/*"></div><div class="file-path-wrapper"><input class="file-path validate" type="text" placeholder="آپلود تصویر"></div></div><input type="hidden" name="all_images"></div>');
     });
 
 
@@ -198,8 +198,6 @@ jQuery(document).ready(function ($) {
         }
 
     });
-
-
     $('.removeImage').click(function () {
         let thisElement = $(this);
         if (confirm('از حذف این آیتم اطمینان دارید؟')){

@@ -5,6 +5,7 @@ const esclient = new elasticsearch.Client({
     apiVersion: '7.x', // use the same version of your Elasticsearch instance
 });
 
+
 /* For develop */
 global.ES_INDEX = 'myproducts21';
 global.ES_TYPE = '_doc';
@@ -18,7 +19,7 @@ global.BB_SPLIT_INDEX = 7;
 
 
 /* For sisoog */
-// global.ES_INDEX = 'myproducts21';
+// global.ES_INDEX = 'zbot';
 // global.ES_TYPE = '_doc';
 // global.BB_KEY_ID = '363c394fc22c';
 // global.BB_APP_KEY = '0020d36fbd4fa1eaa0a65dbe6134917f7aa93c3eda';

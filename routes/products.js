@@ -44,6 +44,7 @@ router.post('/add',function (req, res) {
         let imgArray = files.part_image;
         let imageNames = [];
         let image_json = '';
+        let bb_images_ids_json = {};
         let bb_images_ids = [];
 
         for (let j = 0; j < imgArray.length; j++) {
@@ -69,21 +70,23 @@ router.post('/add',function (req, res) {
                     if (err) {throw err;}
                     b2.uploadFile(singleImg.path, {
                         bucketId: BB_BUCKET_ID,
-                        fileName: BB_SITE_UPLOAD_URL_PREFIX + timeNow + '-' + singleImg.originalFilename, // this is the object storage "key". Can include a full path
+                        fileName: BB_SITE_UPLOAD_URL_PREFIX + singleImg.originalFilename, // this is the object storage "key". Can include a full path
                     }, function (err, result) {
                         if (err) {
                             console.log(err);
                         } else {
-                            bb_images_ids.push(result.fileId);
+                            bb_images_ids_json = {
+                                'name': imgArray[j].originalFilename,
+                                'id': result.fileId
+                            };
+                            bb_images_ids.push(bb_images_ids_json);
                         }
                     });
                 });
                 //imageNames.push('http://' + hostname + '/uploads/images/' + timeNow + '-' + imgArray[j].originalFilename);
-                imageNames.push(BB_FILE_URL + timeNow + '-' + imgArray[j].originalFilename);
+                imageNames.push(BB_FILE_URL + imgArray[j].originalFilename);
             }
         }
-
-
         if (imageNames.length !== 0){
             image_json = '"Image":' + json_encode(imageNames) ;
         } else {
@@ -98,6 +101,7 @@ router.post('/add',function (req, res) {
         let filesArray = files.docUrl;
         let documentsArray = {};
         let docs_json = '';
+        let bb_docs_ids_json = {};
         let bb_docs_ids = [];
 
         for (let k = 0; k < filesArray.length; k++) {
@@ -123,12 +127,17 @@ router.post('/add',function (req, res) {
                     if(err){ throw err; }
                     b3.uploadFile(singleFile.path, {
                         bucketId: BB_BUCKET_ID,
-                        fileName: BB_SITE_UPLOAD_URL_PREFIX + timeNow + '-' + singleFile.originalFilename, // this is the object storage "key". Can include a full path
+                        fileName: BB_SITE_UPLOAD_URL_PREFIX + singleFile.originalFilename, // this is the object storage "key". Can include a full path
                     }, function(err, result){
                         if (err) {
                             console.log(err);
                         }else {
-                            bb_docs_ids.push(result.fileId);
+                            bb_docs_ids_json = {
+                                'name': filesArray[k].originalFilename,
+                                'id': result.fileId
+                            };
+                            bb_docs_ids.push(bb_docs_ids_json);
+                            //bb_docs_ids.push(result.fileId);
                         }
                     });
                 });
@@ -136,7 +145,7 @@ router.post('/add',function (req, res) {
                 documentsArray[doc_types[k]]=[{
                     'Name':doc_names[k],
                     //'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
-                    'Url':BB_FILE_URL + timeNow + '-' + filesArray[k].originalFilename,
+                    'Url':BB_FILE_URL + filesArray[k].originalFilename,
                 }];
             }
         }
@@ -261,6 +270,8 @@ router.get('/edit/:product_id' , function (req,res) {
     images_ids = [];
     docs_src = [];
     docs_ids = [];
+    temp_images_array = [];
+    temp_docs_array = [];
     const query = {
         text: 'SELECT * FROM '+ PRODUCT_TABLE_NAME +' WHERE id=$1',
         values: [req.params.product_id],
@@ -274,10 +285,11 @@ router.get('/edit/:product_id' , function (req,res) {
             let attrs = Object.entries(json_parse['Attributes']);
             let docs = Object.entries(json_parse['Documents']);
 
+            //res.send(json_parse['Image']);
 
             res.render('dashboard/edit_product' , {
                 title: 'ویرایش محصول',
-                page_name: 'addProduct',
+                page_name: 'editProduct',
                 validation_errors : '',
                 product : response.rows[0],
                 images : json_parse['Image'],
@@ -311,25 +323,35 @@ router.post('/update',function (req, res) {
 
 
         // Old images
+        let all_images = fields.all_images;
         let old_images = fields.old_part_image;
         let old_image_ids = fields.old_image_ids;
+        let old_image_names = fields.old_image_names;
         let names = [];
         let old_image_ids_array = [];
+        let old_image_ids_array_json = {};
         if (old_images !== undefined){
             for (let i = 0; i < old_images.length ; i++) {
                 names.push(old_images[i]);
             }
         }
         if (old_image_ids !== undefined){
-            for (let j = 0; j < old_image_ids.length ; j++) {
-                old_image_ids_array.push(old_image_ids[j]);
+            for (let i = 0; i < old_image_ids.length ; i++) {
+                    old_image_ids_array_json = {
+                        'name': old_image_names[i],
+                        'id': old_image_ids[i]
+                    };
+                    old_image_ids_array.push(old_image_ids_array_json);
+
             }
         }
+
         // New Images
         let imgArray = files.part_image;
         let imageNames = [];
         let image_json = '';
         let bb_images_ids = [];
+        let bb_images_ids_json = {};
 
         if (imgArray !== undefined){
             for (let j = 0; j < imgArray.length; j++) {
@@ -355,30 +377,34 @@ router.post('/update',function (req, res) {
                         if (err) {throw err;}
                         b2.uploadFile(singleImg.path, {
                             bucketId: BB_BUCKET_ID,
-                            fileName: BB_SITE_UPLOAD_URL_PREFIX + timeNow + '-' + singleImg.originalFilename, // this is the object storage "key". Can include a full path
+                            fileName: BB_SITE_UPLOAD_URL_PREFIX + singleImg.originalFilename, // this is the object storage "key". Can include a full path
                         }, function (err, result) {
                             if (err) {
                                 console.log(err);
                             } else {
-                                bb_images_ids.push(result.fileId);
+                                bb_images_ids_json = {
+                                    'name': imgArray[j].originalFilename,
+                                    'id': result.fileId
+                                };
+                                bb_images_ids.push(bb_images_ids_json);
                             }
                         });
                     });
-
-                    imageNames.push(BB_FILE_URL + timeNow + '-' + imgArray[j].originalFilename);
+                    imageNames.push(BB_FILE_URL + imgArray[j].originalFilename);
                     //imageNames.push('http://' + hostname + '/uploads/images/' + timeNow + '-' + imgArray[j].originalFilename);
                 }
             }
         }
 
         if (imageNames.length !== 0 && names.length !== 0){
-            image_json = '"Image":[' + json_encode(names + '"' + ',' + '"' + imageNames) + ']';
+            image_json = '"Image":' + json_encode(names.concat(imageNames));
+            //image_json = '"Image":[' + json_encode(names + '"' + ',' + '"' + imageNames) + ']';
             image_json = image_json.replace(/\\/g, "");
         }else if(imageNames.length !== 0 && names.length === 0){
-            image_json = '"Image":[' + json_encode(imageNames) + ']';
+            image_json = '"Image":' + json_encode(imageNames);
             image_json = image_json.replace(/\\/g, "");
         }else if(names.length !== 0 && imageNames.length === 0) {
-            image_json = '"Image":[' + json_encode(names) + ']';
+            image_json = '"Image":' + json_encode(names);
             image_json = image_json.replace(/\\/g, "");
         }else {
             image_json = '' ;
@@ -386,14 +412,28 @@ router.post('/update',function (req, res) {
         }
 
 
+        // if (imageNames.length !== 0 || names.length !== 0){
+        //     image_json = '"Image":[' + json_encode(names + '"' + ',' + '"' + imageNames) + ']';
+        //     image_json = image_json.replace(/\\/g, "");
+        // }else {
+        //     image_json = '' ;
+        //     errors.part_image = 'حداقل یک تصویر انتخاب کنید!';
+        // }
+
+
+
         // Old Documents
+        let all_docs = fields.all_docs;
         let old_doc_type = fields.oldDocType;
         let old_doc_name = fields.oldDocName;
         let old_doc_url = fields.oldDocUrl;
         let docs_array = {};
         let docs = [];
         let old_doc_ids = fields.old_doc_ids;
+        let old_doc_names = fields.old_doc_names;
         let old_doc_ids_array = [];
+        let old_doc_ids_array_json = {};
+
         if (old_doc_url !== undefined){
             for (let i = 0; i < old_doc_url.length ; i++) {
                 docs_array[old_doc_type[i]]=[{
@@ -404,22 +444,37 @@ router.post('/update',function (req, res) {
             }
         }
         if (old_doc_ids !== undefined){
-            for (let j = 0; j < old_doc_ids.length ; j++) {
-                old_doc_ids_array.push(old_doc_ids[j]);
+            for (let i = 0; i < old_doc_ids.length ; i++) {
+                old_doc_ids_array_json = {
+                    'name': old_doc_names[i],
+                    'id': old_doc_ids[i]
+                };
+                old_doc_ids_array.push(old_doc_ids_array_json);
             }
         }
+
+
         // New Documents
         let doc_types = fields.docType;
         let doc_names = fields.docName;
         let filesArray = files.docUrl;
+
         let docs_json = '';
         let bb_docs_ids = [];
+        let bb_docs_ids_json = {};
         if (filesArray !== undefined){
+            const b3 = new b2CloudStorage({
+                auth: {
+                    accountId: BB_KEY_ID, // NOTE: This is the accountId unique to the key
+                    applicationKey: BB_APP_KEY
+                }
+            });
             for (let k = 0; k < filesArray.length; k++) {
                 let uploadFileOk = 1;
                 let hostname = req.headers.host;
                 let newPath = './public/uploads/documents/';
                 let singleFile = filesArray[k];
+
                 let fileType =getExtension(singleFile.originalFilename);
                 if (fileType !== 'pdf' && fileType !== 'html' && fileType !== 'htm' ){
                     uploadFileOk = 0;
@@ -428,35 +483,35 @@ router.post('/update',function (req, res) {
                     let timeNow = Date.now();
                     //newPath+= timeNow + '-' + singleFile.originalFilename;
                     //readAndWriteFile(singleFile, newPath);
-                    const b3 = new b2CloudStorage({
-                        auth: {
-                            accountId: BB_KEY_ID, // NOTE: This is the accountId unique to the key
-                            applicationKey: BB_APP_KEY
-                        }
-                    });
+
+                    docs_array[doc_types[k]]=[{
+                        'Name':doc_names[k],
+                        'Url':BB_FILE_URL + filesArray[k].originalFilename,
+                        //'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
+                    }];
+
+
                     b3.authorize(function(err){
                         if(err){ throw err; }
                         b3.uploadFile(singleFile.path, {
                             bucketId: BB_BUCKET_ID,
-                            fileName: BB_SITE_UPLOAD_URL_PREFIX + timeNow + '-' + singleFile.originalFilename, // this is the object storage "key". Can include a full path
+                            fileName: BB_SITE_UPLOAD_URL_PREFIX + singleFile.originalFilename, // this is the object storage "key". Can include a full path
                         }, function(err, result){
                             if (err) {
                                 console.log(err);
                             }else {
-                                bb_docs_ids.push(result.fileId);
+                                bb_docs_ids_json = {
+                                    'name': filesArray[k].originalFilename,
+                                    'id': result.fileId
+                                };
+                                bb_docs_ids.push(bb_docs_ids_json);
                             }
                         });
                     });
-
-                    docs_array[doc_types[k]]=[{
-                        'Name':doc_names[k],
-                        'Url':BB_FILE_URL + timeNow + '-' + filesArray[k].originalFilename,
-                        //'Url':'http://' + hostname + '/uploads/documents/' + timeNow + '-' + filesArray[k].originalFilename,
-                    }];
-
                 }
             }
         }
+
         let documentsArrayJson = json_encode(docs_array).replace(/\[/g, "").replace(/\]/g, "");
         docs_json = '"Documents":' + documentsArrayJson;
         docs_json = docs_json.replace(/\\/g, "");
@@ -485,7 +540,7 @@ router.post('/update',function (req, res) {
                 res.render('dashboard/add_product', {title: 'افزودن محصول',validation_errors: errors});
             } else {
                 let check_ids = setInterval(function () {
-                    if ((bb_images_ids.length +names.length)===imgArray.length && (bb_docs_ids.length +docs.length)===filesArray.length  ){
+                    if ((bb_images_ids.length +names.length) === all_images.length && (bb_docs_ids.length +docs.length) === all_docs.length  ){
                         const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
                         const sij_json = '{' + image_json + ','  + docs_json + '}';
                         const query = {
@@ -505,18 +560,14 @@ router.post('/update',function (req, res) {
                                         applicationKey: BB_APP_KEY
                                     }
                                 });
-
-
-                                let docs_ids_json = JSON.parse(json_encode(docs_ids));
-                                for (let ii=0 ; ii<docs_src.length ; ii++){
-                                    for (let kk=0 ; kk<docs_src.length ; kk++){
-                                        // console.log(docs_ids[ii]);
+                                for (let i=0; i<temp_images_array.length; i++){
+                                    try {
                                         b2.authorize(function(err){
                                             if(err){ throw err; }
                                             b2.deleteFileVersion( {
-                                                fileName: BB_SITE_UPLOAD_URL_PREFIX + docs_src[ii],
-                                                fileId : docs_ids_json[ii]
-                                            }, function(err ,result){
+                                                fileName: BB_SITE_UPLOAD_URL_PREFIX + temp_images_array[i]['name'],
+                                                fileId : temp_images_array[i]['id']
+                                            }, function(err){
                                                 if (err) {
                                                     console.log(err);
                                                 }else {
@@ -524,19 +575,25 @@ router.post('/update',function (req, res) {
                                                 }
                                             });
                                         });
+                                    }catch (e) {
+                                        console.log(e);
                                     }
                                 }
 
-                                let images_ids_json = JSON.parse(json_encode(images_ids));
-                                for (let ii=0 ; ii<images_src.length ; ii++){
-                                    for (let jj=0 ; jj<images_src.length ; jj++){
-                                        console.log('dsasad: ' + images_ids_json[jj]);
-                                        b2.authorize(function(err){
+                                const b3 = new b2CloudStorage({
+                                    auth: {
+                                        accountId: BB_KEY_ID,
+                                        applicationKey: BB_APP_KEY
+                                    }
+                                });
+                                for (let j=0; j<temp_docs_array.length; j++){
+                                    try {
+                                        b3.authorize(function(err){
                                             if(err){ throw err; }
-                                            b2.deleteFileVersion( {
-                                                fileName: BB_SITE_UPLOAD_URL_PREFIX + images_src[jj],
-                                                fileId : images_ids_json[jj]
-                                            }, function(err ,result){
+                                            b3.deleteFileVersion( {
+                                                fileName: BB_SITE_UPLOAD_URL_PREFIX + temp_docs_array[j]['name'],
+                                                fileId : temp_docs_array[j]['id']
+                                            }, function(err){
                                                 if (err) {
                                                     console.log(err);
                                                 }else {
@@ -544,8 +601,11 @@ router.post('/update',function (req, res) {
                                                 }
                                             });
                                         });
+                                    }catch (e) {
+                                        console.log(e);
                                     }
                                 }
+
 
                                 //for (let ii=0 ; ii<images_src.length ; ii++){
                                 // fs.unlink( appDir +'\\public\\uploads\\images\\' + images_src[ii], (err) => {
@@ -597,28 +657,14 @@ router.post('/update',function (req, res) {
                             }
                         });
                         clearInterval(check_ids);
+                    }else {
+                        //console.log('is not');
                     }
                 },3000);
             }
         }
     });
 
-
-
-    function readAndWriteImage(singleImg, newPath) {
-        fs.readFile(singleImg.path , function(err,data) {
-            fs.writeFile(newPath,data, function(err) {
-                if (err) console.log('ERRRRRR!! :'+err);
-            })
-        })
-    }
-    function readAndWriteFile(singleFile, newPath) {
-        fs.readFile(singleFile.path , function(err,data) {
-            fs.writeFile(newPath,data, function(err) {
-                if (err) console.log('ERRRRRR!! :'+err);
-            })
-        })
-    }
     function getExtension(filename) {
         let ext = path.extname(filename||'').split('.');
         return ext[ext.length - 1];

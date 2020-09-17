@@ -93,7 +93,6 @@
                                 </div>
                                 <div class="addImage">
                                     <div class="col-12 my-2">
-                                        <% let counter=0; %>
                                         <% images.forEach( img => { %>
                                             <% //let split_name = img.split("/"); %>
                                             <div class="file-field col-12">
@@ -105,16 +104,25 @@
                                                     <input class="file-path validate" type="text" name="old_part_image" placeholder="آپلود تصویر"
                                                            value="<%= img %>">
                                                 </div>
-                                                <a class="btn-floating btn-sm deep-orange removeImage"
-                                                   data-src="<%= img %>" data-srcid="<%= img_ids[counter] %>">
-                                                    <i class="material-icons align-middle">remove</i>
-                                                </a>
-                                                <input type="hidden" value="<%= img_ids[counter] %>" name="old_image_ids">
+                                                <% img_ids.forEach(imgid => { %>
+                                                    <% let split_name = img.split('/') %>
+                                                    <% if (split_name[BB_SPLIT_INDEX] == imgid.name){ %>
+                                                        <a class="btn-floating btn-sm deep-orange removeImage"
+                                                           data-src="<%= img %>" data-srcid="<%= imgid.id %>">
+                                                            <i class="material-icons align-middle">remove</i>
+                                                        </a>
+                                                    <% } %>
+                                                <% }) %>
+                                                <input type="hidden" name="all_images">
                                             </div>
-                                            <% counter++; %>
                                         <% }) %>
                                     </div>
                                 </div>
+
+                                <% img_ids.forEach(imgid => { %>
+                                    <input type="hidden" value="<%= imgid.id %>" name="old_image_ids">
+                                    <input type="hidden" value="<%= imgid.name %>" name="old_image_names">
+                                <% }) %>
 
                                 <div class="add_document_fieldset">
                                     <a class="btn-floating btn-sm deep-purple" id="add_doc_input" data-toggle="tooltip"
@@ -137,34 +145,36 @@
                                                     <label for="Doc_name">نام سند </label>
                                                     <input type="text" class="form-control" id="Doc_name" name="oldDocName" required value="<%= doc[1]['Name'] %>" >
                                                 </div>
-                                                <!--<div class="form-row file-field col-12">-->
-                                                <!--<div class="file-path-wrapper">-->
-                                                <!--<input class="file-path validate" type="text" placeholder="آپلود فایل" value="<%= doc[1]['Url'] %>" name="oldDocUrl">-->
-                                                <!--</div>-->
-                                                <!--<a class="btn-floating btn-md purple-gradient mt-0 float-left">-->
-                                                <!--<i class="material-icons">cloud_upload</i>-->
-                                                <!--<input type="file" id="Doc_url" accept="application/pdf">-->
-                                                <!--</a>-->
-                                                <!--</div>-->
                                                 <div class="file-field col-12">
                                                     <div class="btn btn-md purple-gradient btn-sm float-left">
                                                         <span><i class="material-icons">attach_file</i></span>
-                                                        <input type="file" id="Doc_url" name="docUrl" accept="application/pdf">
+                                                        <input type="file" id="Doc_url" accept="application/pdf">
                                                     </div>
                                                     <div class="file-path-wrapper">
                                                         <input class="file-path validate" type="text" placeholder="آپلود فایل" value="<%= doc[1]['Url'] %>" name="oldDocUrl">
                                                     </div>
                                                 </div>
-                                                <a class="btn-floating btn-sm deep-orange removeDoc"
-                                                   data-src="<%= doc[1]['Url'] %>" data-srcid="<%= doc_ids[counter2] %>">
-                                                    <i class="material-icons align-middle">remove</i>
-                                                </a>
-                                                <input type="hidden" value="<%= doc_ids[counter2] %>" name="old_doc_ids">
+                                                <% doc_ids.forEach(docid => { %>
+                                                    <% let split_name = doc[1]['Url'].split('/') %>
+                                                    <% if (split_name[BB_SPLIT_INDEX] == docid.name){ %>
+                                                        <a class="btn-floating btn-sm deep-orange removeDoc"
+                                                           data-src="<%= doc[1]['Url'] %>" data-srcid="<%= docid.id %>">
+                                                            <i class="material-icons align-middle">remove</i>
+                                                        </a>
+                                                    <% } %>
+                                                <% }) %>
+                                                <!--<input type="hidden" value="<%= doc_ids[counter2] %>" name="old_doc_ids">-->
+                                                <input type="hidden" name="all_docs">
                                             </div>
-                                        <% counter2++; %>
+                                            <% counter2++; %>
                                         <% }) %>
                                     </div>
                                 </div>
+
+                                <% doc_ids.forEach(docid => { %>
+                                    <input type="hidden" value="<%= docid.id %>" name="old_doc_ids">
+                                    <input type="hidden" value="<%= docid.name %>" name="old_doc_names">
+                                <% }) %>
 
                                 <div class="add_spec_fieldset">
                                     <a class="btn-floating btn-sm deep-purple" id="add_spec_input" data-toggle="tooltip"
