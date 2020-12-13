@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let client = require('../config/db/db');
+let client = require('../config/db/db-dev');
 let util = require('util');
 let paginate = require('express-paginate');
 

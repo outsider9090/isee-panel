@@ -10,7 +10,13 @@ const { requiresLogin } = require('./config/middlewares/auth');
 let paginate = require('express-paginate');
 let compression = require('compression');
 let favicon = require('serve-favicon');
+let {connection} = require('./config/db/orm-dev');
 
+
+
+
+connection.authenticate().then( () => {console.log('Connection Established Successfully')}).catch(err => {console.log(err)});
+//connection.sync({logging:console.log , force:true});
 
 
 // Init App
@@ -67,6 +73,7 @@ app.use(function(req, res, next){
 
 // Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

@@ -5,8 +5,8 @@ const util = require('util');
 const bcrypt = require('bcryptjs');
 let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
-let client = require('../config/db/db');
-
+let client = require('../config/db/db-dev');
+let {MyUser} = require('../config/models/MyUser');
 
 
 router.post('/signup' ,[
@@ -30,25 +30,42 @@ router.post('/signup' ,[
     if ( ! errors.isEmpty()){
         req.session.sessionFlash = {type:'signupError', message: 'مشکل در ثبت نام!'};
         res.redirect('/');
-    }else {
+    } else {
         //console.log(util.inspect('No error'));
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(password, salt, function(err, hash) {
-                const query = {
-                    text: 'INSERT INTO '+ USERS_TABLE_NAME +' (email,password) VALUES($1,$2)',
-                    values: [email,hash],
-                };
-                client.query(query, (err, response) => {
-                    if (err) {
-                        console.log(err.stack);
-                        req.session.sessionFlash = {type: 'signupError', message: 'مشکل در ثبت نام!'};
-                        res.redirect('/');
-                    } else {
-                        console.log(response.rows[0]);
-                        req.session.sessionFlash = {type: 'SignupSuccess', message: 'ثبت نام با موفقیت انجام شد.'};
-                        res.redirect('/');
-                    }
-                });
+
+
+                /* Test query with Sequelize */
+                // MyUser.create({
+                //     email: email,
+                //     password: hash
+                // }).then(user => {
+                //     res.json(user);
+                // })
+                //     .catch(error => {
+                //         console.log(error);
+                //         res.status(404).send(error);
+                //     })
+                /* Test query with Sequelize */
+
+
+
+                // const query = {
+                //     text: 'INSERT INTO '+ USERS_TABLE_NAME +' (email,password) VALUES($1,$2)',
+                //     values: [email,hash],
+                // };
+                // client.query(query, (err, response) => {
+                //     if (err) {
+                //         console.log(err.stack);
+                //         req.session.sessionFlash = {type: 'signupError', message: 'مشکل در ثبت نام!'};
+                //         res.redirect('/');
+                //     } else {
+                //         console.log(response.rows[0]);
+                //         req.session.sessionFlash = {type: 'SignupSuccess', message: 'ثبت نام با موفقیت انجام شد.'};
+                //         res.redirect('/');
+                //     }
+                // });
             });
         });
     }

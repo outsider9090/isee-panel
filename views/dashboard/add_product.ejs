@@ -64,15 +64,28 @@
                                 </fieldset>
                                 <div class="form-row">
                                     <div class="col-md-6 col-sm-12 mb-4 required">
+                                        <label for="manufacturer">سازنده</label>
+                                        <input type="text" class="form-control" id="manufacturer" name="manufacturer" required
+                                        value="<%= old_values.manufacturer %>">
+                                        <% if (validation_errors.length != 0 && validation_errors.manufacturer != null){ %>
+                                            <div class="error-feedback" style="display: block;">
+                                                <span><%= validation_errors.manufacturer %></span>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12 mb-4 required">
                                         <label for="partnumber">شماره قطعه</label>
                                         <input type="text" class="form-control" id="partnumber" name="partnumber" required
-                                        value="<%= old_values.partnumber %>">
+                                               value="<%= old_values.partnumber %>">
                                         <% if (validation_errors.length != 0 && validation_errors.partnumber != null){ %>
                                             <div class="error-feedback" style="display: block;">
                                                 <span><%= validation_errors.partnumber %></span>
                                             </div>
                                         <% } %>
                                     </div>
+                                </div>
+
+                                <div class="form-row">
                                     <div class="col-md-6 col-sm-12 mb-4 required">
                                         <label for="description">توضیحات قطعه</label>
                                         <input type="text" class="form-control" id="description" name="description" required value="<%= old_values.description %>">
@@ -82,10 +95,7 @@
                                             </div>
                                         <% } %>
                                     </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="col-12 mb-4">
+                                    <div class="col-md-6 col-sm-12 mb-4">
                                         <label for="detaileddescription">توصیف همراه با جزئیات</label>
                                         <input type="text" class="form-control" id="detaileddescription" name="detaileddescription">
                                     </div>

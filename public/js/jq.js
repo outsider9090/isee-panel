@@ -30,6 +30,18 @@ jQuery(document).ready(function ($) {
             $(this).siblings('.error-feedback').css('display', 'none');
         }
     });
+    $('#send_product_form').find('#manufacturer').on('input',function () {
+        var input_txt = $(this).val();
+        if (input_txt === ''){
+            $(this).addClass('is-invalid');
+            $(this).removeClass('is-valid');
+            $(this).siblings('.error-feedback').css('display', 'block');
+        }else {
+            $(this).addClass('is-valid');
+            $(this).removeClass('is-invalid');
+            $(this).siblings('.error-feedback').css('display', 'none');
+        }
+    });
     $('#send_product_form').find('#description').on('input',function () {
         var input_txt = $(this).val();
         if (input_txt === ''){
@@ -256,3 +268,6 @@ jQuery(document).ready(function ($) {
 
 
 });
+
+
+

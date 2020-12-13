@@ -6,8 +6,8 @@ let json_encode = require('json_encode');
 let path = require('path');
 let validator = require("validator");
 let util = require("util");
-let client = require('../config/db/db');
-let esclient = require('../config/db/elasticssearch');
+let client = require('../config/db/db-dev');
+let esclient = require('../config/db/elasticssearch-dev');
 const b2CloudStorage = require('b2-cloud-storage');
 
 
@@ -23,14 +23,22 @@ router.get('/add',function () {
 router.post('/add',function (req, res) {
     let form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
+        let manufacturer = fields.manufacturer;
         let partnumber = fields.partnumber;
         let description = fields.description;
         let detaileddescription = fields.detaileddescription;
+
         const oldValues = new Object();
+        oldValues.manufacturer = manufacturer;
         oldValues.partnumber = partnumber;
         oldValues.description = description;
 
+
         const errors = new Object();
+        if (validator.equals(manufacturer[0],''))
+        {
+            errors.manufacturer = 'لطفا نام سازنده را وارد کنید!';
+        }
         if (validator.equals(partnumber[0],''))
         {
             errors.partnumber = 'لطفا شماره قطعه را وارد کنید!';
@@ -38,6 +46,23 @@ router.post('/add',function (req, res) {
         if(validator.equals(description[0],'')){
             errors.description = 'لطفا توضیحات قطعه را وارد کنید!';
         }
+
+
+        // Overview
+        let overview_array = {};
+        let overview_json = '';
+        // for (let i = 0; i < attr_names.length; i++) {
+        //     if (attr_names[i] === ''){counter++;}
+        //     attr_array[attr_names[i]] = attr_values[i];
+        // }
+
+        overview_array['Manufacturer'] = manufacturer;
+        overview_array['Manufacturer Part Number'] = partnumber;
+        overview_array['Description'] = description;
+        overview_array['Detailed Description'] = detaileddescription;
+        overview_json = '"Overview":' + json_encode(overview_array) ;
+        overview_json = overview_json.replace(/\[/g, "").replace(/\]/g, "");
+
 
 
         // Images
@@ -193,8 +218,8 @@ router.post('/add',function (req, res) {
             } else {
                 let check_ids = setInterval(function () {
                     if (bb_images_ids.length === imgArray.length && bb_docs_ids.length === filesArray.length ){
-                        const dkj_json = '{' + image_json + ','  + docs_json + ',' + attr_json + '}';
-                        const sij_json = '{' + image_json + ','  + docs_json + '}';
+                        const dkj_json = '{' + overview_json + ',' + image_json + ','  + docs_json + ',' + attr_json + '}';
+                        const sij_json = '{' + overview_json + ',' + image_json + ','  + docs_json + '}';
                         const query = {
                             text: 'insert into '+ PRODUCT_TABLE_NAME +'(pkey,dkpartnumber,partnumber, description, detaileddescription,sij,dkj,user_id,bbimagesids,bbdocsids) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
                             values: [0,partnumber[0],partnumber[0],description[0],detaileddescription[0],sij_json,dkj_json ,req.user.id,json_encode(bb_images_ids),json_encode(bb_docs_ids) ],
@@ -396,9 +421,9 @@ router.post('/update',function (req, res) {
             }
         }
 
+
         if (imageNames.length !== 0 && names.length !== 0){
             image_json = '"Image":' + json_encode(names.concat(imageNames));
-            //image_json = '"Image":[' + json_encode(names + '"' + ',' + '"' + imageNames) + ']';
             image_json = image_json.replace(/\\/g, "");
         }else if(imageNames.length !== 0 && names.length === 0){
             image_json = '"Image":' + json_encode(imageNames);
@@ -410,16 +435,6 @@ router.post('/update',function (req, res) {
             image_json = '' ;
             errors.part_image = 'حداقل یک تصویر انتخاب کنید!';
         }
-
-
-        // if (imageNames.length !== 0 || names.length !== 0){
-        //     image_json = '"Image":[' + json_encode(names + '"' + ',' + '"' + imageNames) + ']';
-        //     image_json = image_json.replace(/\\/g, "");
-        // }else {
-        //     image_json = '' ;
-        //     errors.part_image = 'حداقل یک تصویر انتخاب کنید!';
-        // }
-
 
 
         // Old Documents
@@ -677,7 +692,6 @@ router.post('/update',function (req, res) {
         return true;
     }
 });
-
 
 
 

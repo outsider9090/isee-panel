@@ -1,13 +1,11 @@
 let express = require('express');
 let router = express.Router();
 let util = require('util');
-let client = require('../config/db/db');
-let esclient = require('../config/db/elasticssearch');
+let client = require('../config/db/db-dev');
+let esclient = require('../config/db/elasticssearch-dev');
 let fs = require('fs');
 let path = require('path');
 const b2CloudStorage = require('b2-cloud-storage');
-
-
 
 
 
@@ -71,7 +69,6 @@ router.post('/remove_document' , function (req, res) {
     res.json({msg:0});
   }
 });
-
 
 router.post('/delete_product' , function (req, res) {
   let product_id = req.body.product_id;
